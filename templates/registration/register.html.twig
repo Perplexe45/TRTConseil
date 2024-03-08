@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription
+{% endblock %}
+
+{% block body %}
+
+
+	<section data-bs-version="5.1" class="form7 cid-u5uXzWpi1R" id="form7-r">
+		<div class=" container">
+			<div class="mbr-section-head">
+				<h3 class="mbr-fonts-style align-center display-2">
+					<strong>Inscription</strong>
+				</h3>
+				<p class="mbr-text mbr-fonts-style align-center mb-4 display-7">
+					( Une de nos équipes vous contactera )
+				</p>
+			</div>
+
+
+			<div class="row justify-content-center mt-3">
+				<div class="col-lg-6 mx-auto mbr-form formSignup">
+					<div class="row">
+						<div hidden="hidden" data-form-alert="" class="alert alert-success col-12">
+							Merci de vous êtes enregistré.
+						</div>
+						<div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
+							Oops...! some problem!
+						</div>
+					</div>
+					<div class="dragArea row">
+						<div class="col-lg-12 col-md-12 col-sm-12 form-group " data-for="name">
+							<form action="" method="POST" class="mx-auto" data-form-title="Form Name">
+								<fieldset class="align-center">
+									<div class="pt-2">
+										<legend>Vous êtes</legend>
+									</div>
+
+
+									<input type="radio" name="categorie" value="Candidats" id="categorie"/>
+									<label for="Candidats">Candidats</label>
+
+									<input class="ms-3" type="radio" name="categorie" value="Recruteurs" id="categorie"/>
+									<label for="Recruteurs">Recruteurs</label>
+									<hr>
+								</fieldset>
+
+								<div
+									class="text-center fs-5 bg-danger">
+									{# Message si oubli de faire une sélection (recruteur ou candidat) #}
+									{% for label, messages in app.flashes %}
+										<div class="flash-{{ label }}">
+											{% for message in messages %}
+												<div class="flash-message">{{ message }}</div>
+
+											{% endfor %}
+										</div>
+									{% endfor %}
+								</div>
+								<script>
+								document.addEventListener('DOMContentLoaded', function () { // Vérifier si le message flash existe
+  let flashMessages = document.querySelectorAll('.flash-message');
+  if (flashMessages) { // Cacher chaque message après 3 secondes
+  flashMessages.forEach(function (flashMessage) {
+	setTimeout(function () {
+  flashMessage.style.display = 'none';
+  }, 4000);
+  });
+  }
+  });
+								</script>
+
+								{{ form_errors(registrationForm) }}
+								{{ form_start(registrationForm) }}
+
+								<div class="form-group mb-3 mt-1 ">
+									{{ form_row(registrationForm.email) }}
+								</div>
+
+								<div class="form-group mb-3">
+									{{ form_row(registrationForm.plainPassword, {label: 'mot de passe'}) }}
+								</div>
+
+								<div class="login_footer form-group mb-3">
+									<div class="chek-form ">
+										{{ form_row(registrationForm.agreeTerms) }}
+									</div>
+								</div>
+
+								<div class="col-auto mbr-section-btn align-center">
+									<button type="submit" class="btn btn-primary display-4 btnWidth">Valider</button>
+								</div>
+
+								<div class="form-note text-center">Vous avez déjà un compte?
+									<a href="/connexion">Connexion</a>
+								</div>
+
+								{{ form_end(registrationForm) }}
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+{% endblock %}
