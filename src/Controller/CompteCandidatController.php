@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class CompteCandidatController extends AbstractController
 {
@@ -15,4 +17,14 @@ class CompteCandidatController extends AbstractController
             'controller_name' => 'CompteCandidatController',
         ]);
     }
+
+    ///////////////////Modif du compte///////////////////////////
+    public function ModifCompte(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('compte_candidat/index.html.twig', [
+            'controller_name' => 'CompteCandidatController',
+        ]);
+    }
+
+
 }

@@ -35,20 +35,27 @@ class Annonce
     private ?bool $publie = null;
 
     #[ORM\ManyToOne(inversedBy: 'annonces')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Recruteur $recruteur = null;
 
     #[ORM\ManyToOne(inversedBy: 'annonces')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Consultant $consultant = null;
 
     #[ORM\OneToMany(targetEntity: CandidatAnnonce::class, mappedBy: 'annonce')]
     private Collection $candidatAnnonces;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $dateCreation = null;
+    
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $dateModif = null;
+
     public function __construct()
     {
         $this->candidatAnnonces = new ArrayCollection();
-    }
+        $this->dateCreation = new \DateTimeImmutable();
+    }  
 
     public function getId(): ?int
     {
@@ -180,4 +187,33 @@ class Annonce
 
         return $this;
     }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(?\DateTimeInterface $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getDateModif(): ?\DateTimeInterface
+    {
+        return $this->dateModif;
+    }
+
+    public function setDateModif(?\DateTimeInterface $dateModif): static
+    {
+        $this->dateModif = $dateModif;
+
+        return $this;
+    }
+
+ 
+
+
+  
 }

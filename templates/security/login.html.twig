@@ -14,6 +14,24 @@
 			</div>
 			<div class="row justify-content-center mt-4">
 				<div class="col-lg-8 mx-auto mbr-form">
+
+				<script>
+		    // Sélection du lien avec la classe refreshForm
+				const refreshLink = document.querySelector('.refreshForm');
+
+				// Ajout d'un écouteur d'événements sur le lien
+				refreshLink.addEventListener('click', function(event) {
+						// Empêcher le comportement par défaut du lien
+						event.preventDefault();
+
+        // Récupérer l'URL du lien
+        const url = this.getAttribute('href');
+				window.alert('OK');
+        // Effectuer la redirection vers l'URL récupérée
+        window.location.href = url;
+    });
+		</script>
+
 					<form action="" method="POST" data-rcpha_sitekey="" data-rcpha_secretkey="" class="mbr-form form-with-styler mx-auto" data-verified="">
 						<p class="mbr-text mbr-fonts-style align-center mb-4 display-7">
 							Veuillez vous identifier
@@ -25,13 +43,13 @@
 
 						{% if app.user %}
 							<div class="mb-3">
-								Vous êtes connécté en tant que : 
+								Vous êtes connécté en tant que :
 								{{ app.user.userIdentifier }},
 								<a href="{{ path('app_logout') }}">Logout</a>
 							</div>
 						{% endif %}
 
-            <div class="dragArea row">
+						<div class="dragArea row">
 							<div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
 								<label for="inputEmail">Email</label>
 								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
@@ -52,8 +70,12 @@
 					</form>
 				</div>
 			</div>
-
-
 		</div>
-	</section>
+
+
+
+
+
+
+
 {% endblock %}

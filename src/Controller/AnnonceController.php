@@ -17,7 +17,7 @@ class AnnonceController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/annonces', name: 'listAnnonces')]
+    #[Route('/annonces', name: 'app-listAnnonces')]
     public function index(): Response
     {
         // Récupérer toutes les annonces publiées
@@ -28,4 +28,21 @@ class AnnonceController extends AbstractController
             'annonces' => $annonces,
         ]);
     }
+
+
+    /////////////////////////////////////////////////
+    ///////////Ajouter une annonce//////////////////
+    #[Route('/annonces/ajout', name: 'app_ajoutAnnonces')]
+    public function ajouterAnnonce(): Response
+    {
+      /*   // Récupérer toutes les annonces publiées
+        $annonces = $this->entityManager->getRepository(Annonce::class)->findBy(['publie' => true]); */
+       /*  dd($annonces); */
+
+        return $this->render('annonces/ajoutAnnonces.html.twig'/* , [
+            'annonces' => $annonces, */
+        );
+    }
+
+
 }

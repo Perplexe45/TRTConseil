@@ -15,20 +15,20 @@ class Candidat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable:true)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable:true)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable:true)]
     private ?string $email = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $approbationConsultant = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidats')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Metier $metier = null;
 
     #[ORM\OneToMany(targetEntity: CandidatAnnonce::class, mappedBy: 'candidat')]
@@ -49,7 +49,7 @@ class Candidat
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(?string $nom): static
     {
         $this->nom = $nom;
 
@@ -61,7 +61,7 @@ class Candidat
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setPrenom(?string $prenom): static
     {
         $this->prenom = $prenom;
 

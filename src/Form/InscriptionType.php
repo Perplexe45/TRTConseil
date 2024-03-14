@@ -23,12 +23,15 @@ class InscriptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Your email ...'
-                ]
-            ])
+        ->add('email', EmailType::class, [
+            'label' => false,
+            'attr' => [
+                'placeholder' => 'Your email ...',
+                'style' => ' border-color: #928787 !important'
+            ]
+        ])
+        
+        
             ->add('motDePasse', RepeatedType::class, [ //Les 2 champs pour le MDP et La vérif du MDP
                 'type' => PasswordType::class,      //sont gérés
                 'label' => false,

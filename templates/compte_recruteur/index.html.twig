@@ -2,12 +2,13 @@
 
 {% block title %}compte candidat
 {% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
 
 	{# {{ dump(app.user) }} #}
 
-	<h1 class="afterHeader pt-2 pb-3">Espace personnel de :
+	<h1 class="afterHeader pt-2 pb-3">Espace personnel du compte de :
 		{{ app.user.email }}
 	</h1>
 
@@ -17,91 +18,115 @@
 			<div class="section">
 				<div class="container">
 					<div class="row">
-						<div class="col-lg-3 col-md-4">
-							<div class="dashboard_menu bg-light">
+						<div
+							class="col-lg-2 col-md-2">
+
+							{# Navbar #}
+							<div class="dashboard_menu bg-light	 rounded-2">
 								<ul class="nav flex-column" role="tablist">
-									<li class="nav-item fs-3 text-warning">
-										<a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">
-											<i class="ti-shopping-cart-full"></i>Annonces</a>
+									<li class="nav-item fs-5 text-warning">
+										<a class="nav-link text-center" id="orders-tab" data-bs-toggle="tab" href="#lastAnnonces" role="tab" aria-controls="lastAnnonces" aria-selected="false">
+											<i class="ti-shopping-cart-full"></i>Dernières annonces</a>
 									</li>
-									<li class="nav-item fs-3">
-										<a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true">
-											<i class="ti-location-pin"></i>Mon adresse</a>
+									<li class="nav-item fs-5 text-warning">
+										<a class="nav-link text-center" id="ajoutAnnonces-tab" data-bs-toggle="tab" href="#addAnnonces" role="tab" aria-controls="addAnnonces" aria-selected="false">
+											<i class="ti-shopping-cart-full"></i>Ajouter une annonce</a>
 									</li>
-									<li class="nav-item fs-3">
-										<a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true">
-											<i class="ti-id-badge"></i>Détails du compte</a>
+									<li class="nav-item fs-5">
+										<a class="nav-link text-center text-nowrap" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true">
+											<i class="ti-location-pin"></i>Coordonnées</a>
 									</li>
-									<li class="nav-item fs-3">
-										<a class="nav-link" id="logout-tab" href="#logout" data-bs-toggle="tab" role="tab" aria-controls="logout" aria-selected="true">
+									<li class="nav-item fs-5">
+										<a class="nav-link text-center" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true">
+											<i class="ti-id-badge"></i>Compte</a>
+									</li>
+									<li class="nav-item fs-5">
+										<a class="nav-link text-center" id="logout-tab" href="#logout" data-bs-toggle="tab" role="tab" aria-controls="logout" aria-selected="true">
 											<i class="ti-lock"></i>Supprimer le compte</a>
 									</li>
 								</ul>
 							</div>
 						</div>
-						<div class="col-lg-8 col-md-7">
-							<div class="tab-content dashboard_content">
+
+						{# Colonne de droite pour les informations du menu #}
+						<div class="col-lg-10 col-md-10">
+							<div
+								class="tab-content dashboard_content">
+
+								{# Message de départ #}
 								<div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
 									<div class="card">
+										<div class="card-header bg-light ">
+											<h3 class="text-center">Gestion des recrutements</h3>
+										</div>
+										<div class="card-body">
+											<p class="fs-5">
+												La gestion des recruteurs consiste à gérer et optimiser les processus de recherche, d'évaluation et d'intégration de candidats au sein d'une entreprise.
+												<br><br>
+												C'est donc dans ce back-office que s'effectue la gestion pour trouver les candidats correspondants.
+											</p>
+										</div>
+									</div>
+								</div>
+
+								{# Dernières annonces #}
+								<div class="tab-pane fade" id="lastAnnonces" role="tabpanel" aria-labelledby="lastAnnonces-tab">
+									<div class="card">
 										<div class="card-header bg-light">
-											<h3 class="text-center">Tableau de bord</h3>
+											<h3 class="text-center">Les annonces</h3>
 										</div>
 										<div class="card-body">
-											<p>From your account dashboard. you can easily check &amp; view your
-												<a href="javascript:void(0);" onclick="$('#orders-tab').trigger('click')">recent orders</a>, manage your
-												<a href="javascript:void(0);" onclick="$('#address-tab').trigger('click')">shipping and billing addresses</a>
-												and
-												<a href="javascript:void(0);" onclick="$('#account-detail-tab').trigger('click')">edit your password and account details.</a>
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
-									<div class="card">
-										<div class="card-header">
-											<h3 class="text-center">Suppression du compte</h3>
-										</div>
-										<div class="card-body">
-											<p>Vous avez la possibilité de supprimer votre compte, si vous le souhaitez
-											</p>
-											<button type="submit" class="btn btn-fill-out py-2" name="submit" value="Submit">Suppression</button>
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-									<div class="card">
-										<div class="card-header">
-											<h3 class="text-center">Liste des annonces postulées</h3>
-										</div>
-										<div class="card-body">
-											<div class="table-responsive">
-												<table class="table">
+											<div class="table-responsive bg-light">
+												<table class="table-bordered table-striped table-hover">
 													<thead>
-														<tr>
-															<th>Order</th>
+														<tr class="text-center">
+															<th>ID</th>
 															<th>Date</th>
-															<th>Status</th>
-															<th>Total</th>
-															<th>Actions</th>
+															<th>Poste</th>
+															<th>Lieu</th>
+															<th>Horaire</th>
+															<th>Salaire</th>
+															<th>Description</th>
+															<th>Candidat</th>
+															<th>Modifier</th>
+															<th>Supprimer</th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr>
-															<td>#1234</td>
-															<td>March 15, 2020</td>
+														<tr class="text-center">
+															<td>1</td>
+															<td>2024.04.34</td>
+															<td>Serveur</td>
+															<td>25 rue de la licorne - 370000 - Tours</td>
+															<td>6h00-14h00 et 18h30-23h00</td>
+															<td>2500 € brut/45h -> semaine</td>
 															<td>Processing</td>
-															<td>$78.00 for 1 item</td>
+															<td class="minWidth">
+																<a href="#" class="btn-primary rounded text-nowrap">Postulants</a>
+															</td>
 															<td>
-																<a href="#" class="btn btn-fill-out btn-sm">View</a>
+																<a href="#" class="btn-primary rounded text-nowrap">Modifier</a>
+															</td>
+															<td>
+																<a href="#" class="btn-primary rounded text-nowrap">Supprimer</a>
 															</td>
 														</tr>
-														<tr>
-															<td>#2366</td>
-															<td>June 20, 2020</td>
-															<td>Completed</td>
-															<td>$81.00 for 1 item</td>
+														<tr class="text-center">
+															<td>1</td>
+															<td>2024.04.34</td>
+															<td>Serveur</td>
+															<td>25 rue de la licorne - 370000 - Tours</td>
+															<td>6h00-14h00 et 18h30-23h00</td>
+															<td>2500 € brut/45h -> semaine</td>
+															<td>Processing</td>
+															<td class="minWidth">
+																<a href="#" class="btn-primary rounded text-nowrap">Postulants</a>
+															</td>
 															<td>
-																<a href="#" class="btn btn-fill-out btn-sm">View</a>
+																<a href="#" class="btn-primary rounded text-nowrap">Modifier</a>
+															</td>
+															<td>
+																<a href="#" class="btn-primary rounded text-nowrap">Supprimer</a>
 															</td>
 														</tr>
 													</tbody>
@@ -110,132 +135,207 @@
 										</div>
 									</div>
 								</div>
+
+								{# Ajout d'annonces #}
+								<div class="tab-pane fade" id="addAnnonces" role="tabpanel" aria-labelledby="addAnnonces-tab">
+									<div class="card-header bg-light">
+										<h3 class="text-center">Ajout d'annonces</h3>
+									</div>
+
+									<div class="card-body bg-light">
+										<form method="POST" action="{{ path('add_annonce') }}" class="bg-light">
+											<div class="row">
+												<div class="col">
+													<label for="date">Date</label>
+													<input type="date" class="form-control inputCustom" id="date" name="date">
+												</div>
+												<div class="col">
+													<label for="lieu">Lieu</label>
+													<input type="text" class="form-control inputCustom" id="lieu" name="lieu">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<label for="poste">Poste</label>
+													<input type="text" class="form-control inputCustom" id="poste" name="poste">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<label for="horaire">Horaire</label>
+													<input type="text" class="form-control inputCustom" id="horaire" name="horaire">
+												</div>
+												<div class="col">
+													<label for="salaire">Salaire</label>
+													<input type="text" class="form-control inputCustom" id="salaire" name="salaire">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<label for="description">Description</label>
+													<textarea class="form-control inputCustom" id="description" name="description" rows="3"></textarea>
+												</div>
+											</div>
+											<br>
+											<div class="row">
+												<div class="col">
+													<button type="submit" class="btn btn-primary btn-sm rounded btnWidth">Ajouter</button>
+												</div>
+											</div>
+										</form>
+									</div>
+
+								</div>
+
+								{# Coordonées du recruteur #}
 								<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
 									<div class="row">
+										<div class="card-header bg-light mb-1">
+											<h3 class="text-center">Coordonnées du recruteur</h3>
+										</div>
 										<div class="col-lg-6">
 											<div class="card mb-3 mb-lg-0">
-												<div class="card-header">
-													<h3 class="text-center">Adresse</h3>
+												<div class="card-header bg-light">
+													<h3 class="text-center">Coordonnée enregistrée</h3>
 												</div>
-												<div class="card-body">
-													<address>19 rue de Larçay<br>37550
-														<br>Saint Avertin
-														<br>
-														Vedora
-														<br>1212</address>
-													<p>France</p>
+												<div class="card-header bg-light">
+													<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
+													{# <div >{{dump(app.user.recruteur.id)}}</div> #}
+													<address class="fs-5 text-center">Adresse :
+														{{ app.user.recruteur.adresse }}<br>Code postal :
+														{{ app.user.recruteur.codepostal }}<br>Ville :
+														{{ app.user.recruteur.ville }}
+														<br><br>
 
+														<p class="fs-5">Pays : France</p>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="card">
+													<div class="card-header bg-light">
+														<h3 class="text-center">Modifier les Coordonnées</h3>
+													</div>
+													<div class="card-body bg-light">
+														<form method="POST" action="{{ path('modif_coordonnees') }}" class="bg-light">
+															<div class="row">
+
+																<div class="form-group col-md-12 mb-2">
+																<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
+																	<label>Adresse
+																		<span class="required">*</span>
+																	</label>
+																	<input required="" class="form-control inputCustom" name="adresse" type="text" value="{{ app.user.recruteur.adresse }}">
+																</div>
+																<div class="form-group col-md-12 mb-2">
+																	<label>Code postal
+																		<span class="required">*</span>
+																	</label>
+																	<input required="" class="form-control inputCustom" name="codepostal" value="{{ app.user.recruteur.codepostal }}">
+																</div>
+
+																<div class="form-group col-md-12 mb-2">
+																	<label>Ville
+																		<span class="required">*</span>
+																	</label>
+																	<input required="" class="form-control inputCustom" name="ville" value="{{ app.user.recruteur.ville }}">
+																</div>
+																<div class="form-group col-md-12 mb-2">
+																	<label>Site internet</label>
+																	<input class="form-control inputCustom" name="siteinternet" value="{{ app.user.recruteur.siteinternet }}">
+																</div>
+																<div class="col-md-12">
+																	<button type="submit" class="btn btn-fill-out btnWidth bg-primary" name="submit" value="Submit">Valider</button>
+																</div>
+															</div>
+														</form>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="col-lg-6">
-											<div class="card">
-												<div class="card-header">
-													<h3 class="text-center">Modifier les coordonnées</h3>
-												</div>
-												<div class="card-body">
-													<form method="post" name="enq">
-														<div class="row">
+									</div>
 
-															<div class="form-group col-md-12 mb-2">
-																<label>Adresse
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control" name="adresse" type="text">
-															</div>
-															<div class="form-group col-md-12 mb-2">
-																<label>Code postal
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control" name="codepostal">
-															</div>
+									{# Détails du compte #}
+									<div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+										<div class="card bg-warning">
+											<div class="card-header ">
+												<h3 class="text-center">Détails du compte</h3>
+											</div>
+											<div class="card-header bg-light">
 
-															<div class="form-group col-md-12 mb-2">
-																<label>Ville
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control" name="ville">
-															</div>
-															<div class="form-group col-md-12 mb-2">
-																<label>Téléphone
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control" name="telephone">
-															</div>
-															<div class="col-md-12">
-																<button type="submit" class="btn btn-fill-out btnWidth bg-primary" name="submit" value="Submit">Valider</button>
-															</div>
+												<form method="post" name="enq">
+													<div class="row">
+
+														<div class="form-group col-md-3 mb-2">
+															<label>Nom de l'entreprise</label>
+															{% if app.user.recruteur is defined and app.user.recruteur is not null %}
+																<input class="form-control inputCustom" name="nom" type="text" value="{{ app.user.recruteur.nomEntreprise }}">
+															{% else %}
+																<input class="form-control inputCustom" name="nom" type="text" value="">
+															{% endif %}
 														</div>
-													</form>
-												</div>
+														<div class="form-group col-md-4 mb-2">
+															<label>Address email</label>
+															<input class="form-control inputCustom" name="email" type="email" value="{{ app.user.email }}">
+														</div>
+
+
+														<div class="form-group col-md-5 mb-2">
+															<label>Mot de passe actuel
+																<span class="required">*</span>
+															</label>
+															<input class="form-control inputCustom" name="password" type="password" value="{{ app.user.password }}">
+														</div>
+														<div class="form-group col-md-6 mb-2">
+															<label>Nouveau mot de passe
+																<span class="required">*</span>
+															</label>
+															<input required="" class="form-control inputCustom" name="npassword" type="password">
+														</div>
+														<div class="form-group col-md-12 mb-2">
+															<label>Confirmer le mot de passe
+																<span class="required">*</span>
+															</label>
+															<input required="" class="form-control inputCustom" name="cpassword" type="password">
+														</div>
+														<div class="col-md-12">
+															<button type="submit" class="btn btn-fill-out btnWidth bg-primary" name="submit" value="Submit">Valider</button>
+														</div>
+													</div>
+												</form>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
-									<div class="card">
-										<div class="card-header">
-											<h3 class="text-center">Détails du compte</h3>
-										</div>
-										<div class="card-body ">
 
-											<form method="post" name="enq">
-												<div class="row">
-
-													<div class="form-group col-md-5 mb-2">
-														<label>Nom
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control" name="nom" type="text">
-													</div>
-													<div class="form-group col-md-5 mb-2">
-														<label>Prénom
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control" name="prenom">
-													</div>
-
-													<div class="form-group col-md-10 mb-2">
-														<label>Address email
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control" name="email" type="email" value="{{ app.user.email }}">
-													</div>
-													<div class="form-group col-md-10 mb-2">
-														<label>Mot de passe actuel
-															<span class="required">*</span>
-														</label>
-														<input class="form-control" name="password" type="password" value="{{ app.user.password }}">
-													</div>
-													<div class="form-group col-md-10 mb-2">
-														<label>Nouveau mot de passe
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control" name="npassword" type="password">
-													</div>
-													<div class="form-group col-md-10 mb-2">
-														<label>Confirmer le mot de passe
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control" name="cpassword" type="password">
-													</div>
-													<div class="col-md-10">
-														<button type="submit" class="btn btn-fill-out btnWidth bg-primary" name="submit" value="Submit">Valider</button>
-													</div>
+									{# Suppression du compte #}
+									<div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
+										<div class="card">
+											<div class="card-header bg-light">
+												<h3 class="text-center">Suppression du compte</h3>
+											</div>
+											<div class="card-header bg-light ">
+												<p class="text-center pt-4">Vous avez la possibilité de supprimer votre compte, si vous le souhaitez
+												</p>
+												<div class="mt-4 mb-2">
+													<button type="submit" class="btn btn-primary py-2 my-2 btnWidth" name="submit" value="Submit">Suppression</button>
 												</div>
-											</form>
+
+											</div>
 										</div>
 									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
+
 			</div>
-
-
 		</div>
-	</div>
 
 
-{% endblock %}
+	{% endblock %}
+
+	{% block javascripts %}{% endblock %}

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-/* use App\Entity\Candidat;
-use App\Entity\Recruteur; */
+use App\Entity\Candidat;
+use App\Entity\Recruteur;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,39 +21,49 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $user = new User();
+        $recruteur = new Recruteur();
+        $candidat = new Candidat();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) { //Verif si dans twig, la soumission du form est ok
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $categorie = $request->request->get('categorie');
 
-            //Verification si le choix a bien été sélectionné avec le sélecteur (recruteur ou candidat)
             if (!$categorie) {
                 $this->addFlash('danger', 'Veuillez sélectionner une catégorie (candidat ou recruteur).');
-                return $this->redirectToRoute('app_register'); // Rediriger vers la page d'inscription
+                return $this->redirectToRoute('app_register');
             }
 
-
-            // Déterminer les rôles en fonction de la catégorie
             $roles = [];
-            if ($categorie === 'Candidats') {
+            if ($categorie === 'Candidat') {
                 $roles[] = 'ROLE_CANDIDAT';
-            } elseif ($categorie === 'Recruteurs') {
-                $roles[] = 'ROLE_RECRUTEUR';
-            }
-
-            //On met un booléen pour identifier le recruteur ou le candidat
-            if ($categorie === 'Candidats') {
+                // Récupérer le nom du candidat à partir du formulaire imbriqué
+                $nom = $form->get('candidat')->get('nom')->getData();
+                $candidat->setNom($nom);
+                // Associe l'utilisateur au candidat
+                $user->setCandidat($candidat);
+                $user->setRecruteur(NULL);
                 $user->setConnecCandidat(true);
                 $user->setConnecRecruteur(false);
-            } elseif ($categorie === 'Recruteurs') {
+
+            } elseif ($categorie === 'Recruteur') {
+                $roles[] = 'ROLE_RECRUTEUR';
+                // Récupérer le nom de l'entreprise à partir du formulaire imbriqué
+                $nomEntreprise = $form->get('recruteur')->get('nomEntreprise')->getData();
+                $recruteur->setNomEntreprise($nomEntreprise);
+                // Associe l'utilisateur au recruteur
+                $user->setRecruteur($recruteur);
+                $user->setCandidat(NULL);
                 $user->setConnecCandidat(false);
                 $user->setConnecRecruteur(true);
-            }
-            // Attribuer les rôles à l'utilisateur
-            $user->setRoles($roles);
 
-            // encode the plain password
+            }
+
+            $user->setRoles($roles);
+            $user->setEnService(0);
+
+            // Encode le mot de passe
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -61,11 +71,14 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            // Persiste et flush l'objet Recruteur
+            $entityManager->persist($recruteur);
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Merci de votre enregistrement. Le modérateur du site est prévenu du contact');
+
+            return $this->redirectToRoute('app_register');
         }
 
         return $this->render('registration/register.html.twig', [

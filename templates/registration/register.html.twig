@@ -2,10 +2,9 @@
 
 {% block title %}Inscription
 {% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
-
-
 	<section data-bs-version="5.1" class="form7 cid-u5uXzWpi1R" id="form7-r">
 		<div class=" container">
 			<div class="mbr-section-head">
@@ -16,20 +15,10 @@
 					( Une de nos équipes vous contactera )
 				</p>
 			</div>
-
-
 			<div class="row justify-content-center mt-3">
 				<div class="col-lg-6 mx-auto mbr-form formSignup">
-					<div class="row">
-						<div hidden="hidden" data-form-alert="" class="alert alert-success col-12">
-							Merci de vous êtes enregistré.
-						</div>
-						<div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
-							Oops...! some problem!
-						</div>
-					</div>
 					<div class="dragArea row">
-						<div class="col-lg-12 col-md-12 col-sm-12 form-group " data-for="name">
+						<div class="col-lg-12 col-md-12 col-sm-12 form-group" data-for="name">
 							<form action="" method="POST" class="mx-auto" data-form-title="Form Name">
 								<fieldset class="align-center">
 									<div class="pt-2">
@@ -37,41 +26,80 @@
 									</div>
 
 
-									<input type="radio" name="categorie" value="Candidats" id="categorie"/>
-									<label for="Candidats">Candidats</label>
+									<input type="radio" name="categorie" value="Candidat" id="categorie"/>
+									<label for="Candidat">Candidat</label>
 
-									<input class="ms-3" type="radio" name="categorie" value="Recruteurs" id="categorie"/>
-									<label for="Recruteurs">Recruteurs</label>
+									<input class="ms-3" type="radio" name="categorie" value="Recruteur" id="categorie"/>
+									<label for="Recruteur">Recruteur</label>
 									<hr>
 								</fieldset>
 
 								<div
 									class="text-center fs-5 bg-danger">
-									{# Message si oubli de faire une sélection (recruteur ou candidat) #}
+									{# Message si oubli de faire une sélection (recruteur ou candidat) ou message de success de la soumission du formulaire#}
 									{% for label, messages in app.flashes %}
 										<div class="flash-{{ label }}">
 											{% for message in messages %}
-												<div class="flash-message">{{ message }}</div>
+												<div class="flash-messageSelect flash-messageSuccess">{{ message }}</div>
 
 											{% endfor %}
 										</div>
 									{% endfor %}
 								</div>
+
 								<script>
-								document.addEventListener('DOMContentLoaded', function () { // Vérifier si le message flash existe
-  let flashMessages = document.querySelectorAll('.flash-message');
-  if (flashMessages) { // Cacher chaque message après 3 secondes
-  flashMessages.forEach(function (flashMessage) {
-	setTimeout(function () {
-  flashMessage.style.display = 'none';
-  }, 4000);
-  });
-  }
-  });
+									document.addEventListener('DOMContentLoaded', function () {
+// Sélectionner les éléments avec la classe .flash-messageSelect et la classe .flash-messageSuccess
+
+// //////////////////////////////////////////////////////////////////////////////////////////
+// Fonction asynchrone pour que le message d'erreur soit visible pendant 4 secondes du sélect
+let flashMessagesSelect = document.querySelectorAll('.flash-messageSelect');
+async function cacherMessagesFlash() { // Parcourir tous les éléments .flash-messageSelect
+for (let flashMessage of flashMessagesSelect) { // Cacher le message flash après 4 secondes
+await new Promise(resolve => setTimeout(resolve, 4000));
+flashMessage.style.display = 'none';
+}
+}
+// Appeler la fonction pour cacher les messages flash
+cacherMessagesFlash();
+// ///////////////////////////////Fin du traitement////////////////////////////////////////
+
+// ///////////////////////////////////////////////////////////////////////////////
+// Fonction asynchrone pour gérer les messages flash et la redirection
+let flashMessagesSuccess = document.querySelectorAll('.flash-messageSuccess');
+let flashMessageOk = false;
+async function gererMessagesFlashEtRedirection() {
+for (let flashMessage of flashMessagesSuccess) { // Cacher le message flash après 4 secondes
+await new Promise(resolve => setTimeout(resolve, 4000));
+flashMessage.style.display = 'none';
+flashMessageOk = true;
+}
+}
+});
+
+// Appeler la fonction pour gérer les messages flash et la redirection
+gererMessagesFlashEtRedirection();
+
+console.log('flashMessageOk');
+// Redirection sur la page d'accuel
+if (flashMessageOk === true) {
+window.location.href = "{{ path('app_home') }}";
+}
+// //////////////////F////////////////////////////////////
 								</script>
+
 
 								{{ form_errors(registrationForm) }}
 								{{ form_start(registrationForm) }}
+
+								<div class="row">
+									<div class="col mb-3 rounded p-2">
+										{{ form_row(registrationForm.candidat.nom) }}
+									</div>
+									<div class="col mb-3 p-2">
+										{{ form_row(registrationForm.recruteur.nomEntreprise) }}
+									</div>
+								</div>
 
 								<div class="form-group mb-3 mt-1 ">
 									{{ form_row(registrationForm.email) }}
@@ -104,6 +132,4 @@
 			</div>
 		</div>
 	</section>
-
-
 {% endblock %}

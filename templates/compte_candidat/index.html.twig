@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}compte candidat
-{% endblock %}
+{% block title %}compte candidat{% endblock %}
+{% block stylesheets %} {% endblock %}
 
 {% block body %}
 
@@ -70,7 +70,7 @@
 								<div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
 									<div class="card">
 										<div class="card-header">
-											<h3 class="text-center">Liste des annonces postulées</h3>
+											<h3 class="text-center">Mes annonces postulées</h3>
 										</div>
 										<div class="card-body">
 											<div class="table-responsive">
@@ -133,7 +133,7 @@
 													<h3 class="text-center">Modifier les coordonnées</h3>
 												</div>
 												<div class="card-body">
-													<form method="post" name="enq">
+													<form method="POST">
 														<div class="row">
 
 															<div class="form-group col-md-12 mb-2">
@@ -178,7 +178,7 @@
 										</div>
 										<div class="card-body ">
 
-											<form method="post" name="enq">
+											<form method="POST">
 												<div class="row">
 
 													<div class="form-group col-md-5 mb-2">
@@ -238,3 +238,5 @@
 
 
 {% endblock %}
+
+{% block javascripts %}	{% endblock %}
