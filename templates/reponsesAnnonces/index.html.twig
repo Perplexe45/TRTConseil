@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réponses annonce
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="afterHeader">
+			<h1 class="pt-1">Réponse de l'annonce</h1>
+		</div>
+
+		<div class="m-5">
+			<h3 class="text-center">Détail :
+				<b>{{ annonce.poste }}</b>
+				-
+				<i>{{ annonce.lieu }}</i>
+				-
+				{{ annonce.salaire }}</h3>
+		</div>
+
+	{# {{ dump(annonce) }}  #}
+
+		<div class="mb-5">
+			<table class="table table-striped table-hover  ">
+				<thead class="thead-dark">
+					<tr>
+						<th>ID</th>
+						<th>Prénom</th>
+						<th>Nom</th>
+						<th>Métier</th>
+						<th>Email</th>
+						<th>CV</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{# {{ dump(annonce.candidatAnnonces) }}  #}
+					{% for candidatAnnonce in annonce.candidatAnnonces %}
+						<tr>
+							<td>{{ candidatAnnonce.id }}</td>
+							<td>{{ candidatAnnonce.candidat.prenom }}</td>
+							<td>{{ candidatAnnonce.candidat.nom }}</td>
+							<td>{{ candidatAnnonce.candidat.metier }}</td>
+							<td>{{ candidatAnnonce.candidat.email}}</td>
+							<td>{{ candidatAnnonce.candidat.cv }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+
+		</div>
+	</div>
+
+	{% block javascripts %}
+		<script>
+			// Sélectionne le message flash
+const successMessage = document.querySelector('#success-message');
+
+// Masquer le message après 3 secondes
+setTimeout(() => {
+successMessage.style.display = 'none';
+}, 3000);
+		</script>
+	{% endblock %}
+
+{% endblock %}

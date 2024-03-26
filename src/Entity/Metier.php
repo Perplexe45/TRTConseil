@@ -21,9 +21,13 @@ class Metier
     #[ORM\OneToMany(targetEntity: Candidat::class, mappedBy: 'metier')]
     private Collection $candidats;
 
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'metier')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->candidats = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +71,36 @@ class Metier
             // set the owning side to null (unless already changed)
             if ($candidat->getMetier() === $this) {
                 $candidat->setMetier(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setMetier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getMetier() === $this) {
+                $user->setMetier(null);
             }
         }
 

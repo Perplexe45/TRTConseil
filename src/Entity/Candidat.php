@@ -34,6 +34,9 @@ class Candidat
     #[ORM\OneToMany(targetEntity: CandidatAnnonce::class, mappedBy: 'candidat')]
     private Collection $candidatAnnonces;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cv = null;
+
     public function __construct()
     {
         $this->candidatAnnonces = new ArrayCollection();
@@ -130,6 +133,18 @@ class Candidat
                 $candidatAnnonce->setCandidat(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): static
+    {
+        $this->cv = $cv;
 
         return $this;
     }

@@ -27,6 +27,16 @@
 		</div>
 	</section>
 
+	<div class="container" id="flash-messages">
+        {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
+	</div>
+
 	<section data-bs-version="5.1" class="header14" id="header14-1j">
 		<div class="container">
 			<div class="row justify-content-center align-items-center m-3">
@@ -320,6 +330,7 @@
 		</div>
 	</section>
 
+	<input name="animation" type="hidden"/>
 
 	<section class="display-7" style="
 								padding: 0;
@@ -338,7 +349,17 @@
 	<script src="assets/theme/js/script.js"></script>
 	<script src="assets/formoid/formoid.min.js"></script>
 
-	<input name="animation" type="hidden"/>
+	{# //Messages pour que la durée ne soit que de 4 secondes #}
+{# 	<script type="text/javascript">
+  window.onload = function() {
+    setTimeout(function() {
+      var flashMessages = document.querySelectorAll("#flash-messages .alert");
+      flashMessages.forEach(function(el) {
+        el.parentNode.removeChild(el);
+      });
+    }, 4000); // 4 seconds
+  };
+</script> #}
 
 
 {% endblock %}

@@ -27,6 +27,9 @@ class CandidatAnnonce
     #[ORM\Column(nullable: true)]
     private ?bool $envoiMailRecruteur = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cv = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class CandidatAnnonce
     public function setEnvoiMailRecruteur(?bool $envoiMailRecruteur): static
     {
         $this->envoiMailRecruteur = $envoiMailRecruteur;
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): static
+    {
+        $this->cv = $cv;
 
         return $this;
     }

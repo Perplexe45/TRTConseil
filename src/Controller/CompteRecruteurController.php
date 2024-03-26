@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\Annonce;
-use App\Entity\Recruteur;
 use App\Repository\RecruteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CompteRecruteurController extends AbstractController
 {
+    /////////////////////////////Page d'accueil du recruteur////////////////////////////////
     #[Route('/compte/recruteur', name: 'app_compte_recruteur')]
     public function index(): Response
     {
@@ -23,7 +23,8 @@ class CompteRecruteurController extends AbstractController
         ]);
     }
 
-    #[Route('/compte/recruteur', name: 'add_annonce')]
+    ////////////////////////Ajouter une annonce du recruteur//////////////////////////////
+    #[Route('/compte/recruteur/addAnnonce', name: 'add_annonce')]
     public function addAnnonce(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Récup l'utilisateur connecté
@@ -46,14 +47,14 @@ class CompteRecruteurController extends AbstractController
 
             // Crée une nouvelle annonce
             $annonce = new Annonce();
-            $annonce->setPoste($poste);
             $annonce->setLieu($lieu);
+            $annonce->setPoste($poste);
             $annonce->setHoraire($horaire);
             $annonce->setSalaire($salaire);
             $annonce->setDescription($description);
             $now = new DateTimeImmutable();
             $annonce->setDateCreation($now);
-            /* $annonce->setRecruteur(); */
+            
 
             $user = $this->getUser();
             if ($user instanceof User && $user->getRecruteur()) {
@@ -69,20 +70,21 @@ class CompteRecruteurController extends AbstractController
         }
 
         // Redirige l'utilisateur vers la page d'ajout d'annonces
-        return $this->redirectToRoute('add_annonce');
+        return $this->render('compte_recruteur/index.html.twig');
     }
 
-    #[Route('/compte/recruteur/modif', name: 'modif_coordonnees')]
+    //////////////////////Modif des coordonnées du recruteur//////////////////////////
+    #[Route('/compte/recruteur/mofifCoordonnees', name: 'modif_coordonnees')]
     public function modifCoordonnees(Request $request, RecruteurRepository $recruteurRepository, EntityManagerInterface $entityManager): Response
     {
         // Récup l'utilisateur connecté
         $user = $this->getUser();
 
         // Vérifie que l'utilisateur a le rôle "ROLE_RECRUTEUR"
-        if (!in_array('ROLE_RECRUTEUR', $user->getRoles())) {
-            // Redirige l'utilisateur vers la page de connexion car mauvaise identif
-            return $this->redirectToRoute('app_login');
-        }
+            if (!in_array('ROLE_RECRUTEUR', $user->getRoles())) {
+                // Redirige l'utilisateur vers la page de connexion car mauvaise identif
+                return $this->redirectToRoute('app_login');
+            }
 
         if ($request->isMethod('POST')) { // Récupère les données du formulaire en Post
             $recruteurId = $request->request->get('recruteur_id'); //identif récupéré avec Twig
@@ -113,7 +115,7 @@ class CompteRecruteurController extends AbstractController
             $entityManager->flush();
 
             // Affiche un message de succès à l'utilisateur
-            $this->addFlash('success', 'Les coordonnées ont été mis à jour.');
+            $this->addFlash('succes', 'Les coordonnées ont été mis à jour.');
         }
 
         // Redirige l'utilisateur vers la page d'ajout d'annonces

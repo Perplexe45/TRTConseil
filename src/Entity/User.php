@@ -59,6 +59,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Administrateur $administrateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Metier $metier = null;
+
+    /**
+     * @see UserInterface
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -119,10 +125,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
-        $this->password = $password;
-
+        $this->password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 13]);
         return $this;
     }
 
@@ -239,6 +244,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdministrateur(?Administrateur $administrateur): static
     {
         $this->administrateur = $administrateur;
+
+        return $this;
+    }
+
+    public function getMetier(): ?Metier
+    {
+        return $this->metier;
+    }
+
+    public function setMetier(?Metier $metier): static
+    {
+        $this->metier = $metier;
 
         return $this;
     }

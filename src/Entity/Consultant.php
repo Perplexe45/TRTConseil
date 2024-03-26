@@ -27,12 +27,13 @@ class Consultant
     #[ORM\Column(length: 20)]
     private ?string $telephone = null;
 
-    #[ORM\ManyToOne(inversedBy: 'consultants')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Administrateur $administrateur = null;
+
 
     #[ORM\OneToMany(targetEntity: Annonce::class, mappedBy: 'consultant')]
     private Collection $annonces;
+
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
 
     public function __construct()
     {
@@ -92,17 +93,11 @@ class Consultant
         return $this;
     }
 
-    public function getAdministrateur(): ?Administrateur
+    public function __toString()    //Il faut renvoyer un "get' ou la propriété déclaré est un "String"
     {
-        return $this->administrateur;
+        return $this->getNom();
     }
 
-    public function setAdministrateur(?Administrateur $administrateur): static
-    {
-        $this->administrateur = $administrateur;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Annonce>
@@ -130,6 +125,23 @@ class Consultant
                 $annonce->setConsultant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+
+        $options = [
+            'cost' => 13,
+        ];
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $options);
+        $this->password = $hashedPassword;
 
         return $this;
     }

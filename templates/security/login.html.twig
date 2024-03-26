@@ -1,36 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion!
+{% block title %}Connexion
 {% endblock %}
 
 {% block body %}
 
 	<section data-bs-version="5.1" class="form7 cid-u5uXzWpi1R" id="form7-r">
 		<div class="container">
-			<div class="mbr-section-head">
-				<h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-					<strong>Connexion</strong>
-				</h3>
+
+			<div class="container my-1">
+				<div class="row justify-content-center">
+					<div class="col-md-8">
+						<div class="text-center mb-4 titleH1">
+							<h1 class="p-3 mb-0">Connexion des utilisateurs</h1>
+						</div>
+					</div>
+				</div>
 			</div>
+
 			<div class="row justify-content-center mt-4">
 				<div class="col-lg-8 mx-auto mbr-form">
 
-				<script>
-		    // Sélection du lien avec la classe refreshForm
-				const refreshLink = document.querySelector('.refreshForm');
+					<script>
+						// Sélection du lien avec la classe refreshForm
+const refreshLink = document.querySelector('.refreshForm');
 
-				// Ajout d'un écouteur d'événements sur le lien
-				refreshLink.addEventListener('click', function(event) {
-						// Empêcher le comportement par défaut du lien
-						event.preventDefault();
+// Ajout d'un écouteur d'événements sur le lien
+refreshLink.addEventListener('click', function (event) { // Empêcher le comportement par défaut du lien
+event.preventDefault();
 
-        // Récupérer l'URL du lien
-        const url = this.getAttribute('href');
-				window.alert('OK');
-        // Effectuer la redirection vers l'URL récupérée
-        window.location.href = url;
-    });
-		</script>
+// Récupérer l'URL du lien
+const url = this.getAttribute('href');
+// window.alert('OK');
+// Effectuer la redirection vers l'URL récupérée
+window.location.href = url;
+});
+					</script>
 
 					<form action="" method="POST" data-rcpha_sitekey="" data-rcpha_secretkey="" class="mbr-form form-with-styler mx-auto" data-verified="">
 						<p class="mbr-text mbr-fonts-style align-center mb-4 display-7">
@@ -52,18 +57,18 @@
 						<div class="dragArea row">
 							<div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
 								<label for="inputEmail">Email</label>
-								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control inputCustom" autocomplete="email" required autofocus>
 							</div>
 							<div data-for="password" class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
 								<label for="inputPassword">mot de passe</label>
-								<input type="password" name="password" id="inputPassword" class="form-control emailInput" autocomplete="current-password" required>
+								<input type="password" name="password" id="inputPassword" class="form-control emailInput inputCustom" autocomplete="current-password" required>
 							</div>
 
 							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 							<div class="col-auto mbr-section-btn align-center">
 								<button type="submit" class="btn btn-primary display-4">
-									Submit
+									Valider
 								</button>
 							</div>
 						</div>
@@ -71,11 +76,4 @@
 				</div>
 			</div>
 		</div>
-
-
-
-
-
-
-
-{% endblock %}
+	{% endblock %}

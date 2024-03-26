@@ -124,6 +124,11 @@ class Recruteur
         return $this;
     }
 
+    public function getRecruteurInfo(): string
+    {
+        return sprintf('%s - %s %s', $this->getNomEntreprise(), $this->getCodePostal(), $this->getVille());
+    }
+
     /**
      * @return Collection<int, Annonce>
      */

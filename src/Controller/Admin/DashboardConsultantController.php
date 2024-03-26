@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Annonce;
+use App\Entity\Candidat;
 use App\Entity\Recruteur;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +19,6 @@ class DashboardConsultantController extends AbstractDashboardController
     public function index(): Response
     {
         return $this->render('security/dashboard_consultant.html.twig');
- 
     }
 
     public function configureDashboard(): Dashboard
@@ -29,6 +30,8 @@ class DashboardConsultantController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('The Label', 'fas fa-list', Recruteur::class);
+        yield MenuItem::linkToCrud('Les recruteurs', 'fas fa-list', Recruteur::class);
+        yield MenuItem::linkToCrud('Les candidat', 'fas fa-user', Candidat::class);
+        yield MenuItem::linkToCrud('Les annonces', 'fas fa-user', Annonce::class);
     }
 }

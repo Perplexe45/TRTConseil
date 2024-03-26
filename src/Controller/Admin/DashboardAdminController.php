@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Controller\Admin;
-    
+
+use App\Entity\User;
+use App\Entity\Annonce;
+use App\Entity\Candidat;
 use App\Entity\Consultant;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +33,8 @@ class DashboardAdminController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('consultant', 'fas fa-user', Consultant::class);
+        yield MenuItem::linkToCrud('Ajouter consultant', 'fas fa-user', User::class);
+       
+        /* yield MenuItem::linkToCrud('annonce', 'fas fa-user', Annonce::class); */
     }
 }

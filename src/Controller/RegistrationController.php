@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Candidat;
 use App\Entity\Recruteur;
+
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $categorie = $request->request->get('categorie');
@@ -39,8 +41,13 @@ class RegistrationController extends AbstractController
             if ($categorie === 'Candidat') {
                 $roles[] = 'ROLE_CANDIDAT';
                 // Récupérer le nom du candidat à partir du formulaire imbriqué
-                $nom = $form->get('candidat')->get('nom')->getData();
+                $nom = $form->get('Candidat')->get('nom')->getData();
                 $candidat->setNom($nom);
+
+                // Associer le métier au candidat
+                $metier = $form->get('metier')->getData();
+                $candidat->setMetier($metier);
+
                 // Associe l'utilisateur au candidat
                 $user->setCandidat($candidat);
                 $user->setRecruteur(NULL);
@@ -57,7 +64,6 @@ class RegistrationController extends AbstractController
                 $user->setCandidat(NULL);
                 $user->setConnecCandidat(false);
                 $user->setConnecRecruteur(true);
-
             }
 
             $user->setRoles($roles);
@@ -71,8 +77,16 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            // Persiste et flush l'objet Recruteur
-            $entityManager->persist($recruteur);
+            dd($user);
+
+            // Persiste et flush l'objet Recruteur ou candidat
+            if ($categorie === 'Candidat') {
+                $entityManager->persist($candidat);
+            } elseif ($categorie === 'Recruteur') {
+                $entityManager->persist($recruteur);
+            }
+
+            //Début de l'enregistrement dans la table User
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -83,6 +97,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+
         ]);
     }
 }
