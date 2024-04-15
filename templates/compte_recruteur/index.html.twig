@@ -27,11 +27,24 @@
 	<div class="">
 		<div class=" ">
 			<div class="section">
+
+				{# Message pour confirmation du candidat qui a postulé #}
+				<div class="container" id="flash-messages">
+					<div class="messages-container">
+						{% for message in app.flashes('error') %}
+							<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+						{% endfor %}
+
+						{% for message in app.flashes('success') %}
+							<div class="alert alert-success centered" role="alert">{{ message }}</div>
+						{% endfor %}
+					</div>
+				</div>
+					
+
 				<div class="container">
 					<div class="row">
-						<div
-							class="col-lg-2 col-md-2">
-
+						<div class="col-lg-2 col-md-2">
 							{# Navbar #}
 							<div class="dashboard_menu bg-light	 rounded-2">
 								<ul class="nav flex-column" role="tablist">
@@ -84,31 +97,28 @@
 								<div class="tab-pane fade" id="lastAnnonces" role="tabpanel" aria-labelledby="lastAnnonces-tab">
 									<div class="card bg-light">
 										<div class="card-header bg-light">
-											<h3 class="text-center">Liste des annonces
-
-
-											</div>
+											<h3 class="text-center">Liste des annonces</div>
 											<div class="card-body">
-												<div class="table-responsive bg-light">
-													<table class="table-bordered table-striped table-hover">
-														<thead>
-															<tr class="text-center">
-																<th>ID</th>
-																<th>Date</th>
-																<th>Poste</th>
-																<th>Lieu</th>
-																<th>Horaire</th>
-																<th>Salaire</th>
-																<th>Description</th>
-																<th>Réponses</th>
-																<th>Action</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr class="text-center">
-																{% if app.user.recruteur %}
-																	{% for annonce in app.user.recruteur.annonces %}
-																		<tr class="text-center">
+												<table class="table-bordered table-striped table-hover">
+													<thead>
+														<tr class="text-center">
+															<th>ID</th>
+															<th>Date</th>
+															<th>Poste</th>
+															<th>Lieu</th>
+															<th>Horaire</th>
+															<th>Salaire</th>
+															<th>Description</th>
+															<th>Réponses</th>
+															<th>Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr class="text-center">
+															{% if app.user.recruteur %}
+																{% for annonce in app.user.recruteur.annonces %}
+																	<tr class="text-center">
+																		{% if annonce.publie %}
 																			<td>{{ annonce.id }}</td>
 																			<td>{{ annonce.dateCreation|date('Y.m.d') }}</td>
 																			<td>{{ annonce.poste }}</td>
@@ -132,248 +142,284 @@
 
 																				</div>
 																			</td>
-																		</tr>
-																	</td>
-																</tr>
-															{% endfor %}
-														{% endif %}
-													</tr>
-												</tbody>
-											</table>
+																		{% endif %}
+																	</tr>
+																{% endfor %}
+															{% endif %}
+														</tr>
+													</tbody>
+												</table>
+
+											</div>
 										</div>
 									</div>
-								</div>
-							</div>
 
-							{# Ajout d'annonces #}
-							<div class="tab-pane fade" id="addAnnonces" role="tabpanel" aria-labelledby="addAnnonces-tab">
-								<div class="card-header bg-light">
-									<h3 class="text-center">Ajout d'annonces</h3>
-								</div>
+									{# Ajout d'annonces #}
+									<div class="tab-pane fade" id="addAnnonces" role="tabpanel" aria-labelledby="addAnnonces-tab">
+										<div class="card-header bg-light">
+											<h3 class="text-center">Ajout d'annonces</h3>
+										</div>
 
-								<div class="card-body bg-light">
-									<form method="POST" action="{{ path('add_annonce') }}" class="bg-light">
-										<div class="row">
-											<div class="col">
-												<label for="date">Date</label>
-												<input type="date" class="form-control inputCustom" id="date" name="date">
-											</div>
-											<div class="col">
-												<label for="lieu">Lieu</label>
-												<input type="text" class="form-control inputCustom" id="lieu" name="lieu">
-											</div>
+										<div class="card-body bg-light">
+											<form method="POST" action="{{ path('add_annonce') }}" class="bg-light">
+												<div class="row">
+													<div class="col">
+														<label for="date">Date</label>
+														<input type="date" class="form-control inputCustom" id="date" name="date">
+													</div>
+													<div class="col">
+														<label for="lieu">Lieu</label>
+														<input type="text" class="form-control inputCustom" id="lieu" name="lieu">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<label for="poste">Poste</label>
+														<input type="text" class="form-control inputCustom" id="poste" name="poste">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<label for="horaire">Horaire</label>
+														<input type="text" class="form-control inputCustom" id="horaire" name="horaire">
+													</div>
+													<div class="col">
+														<label for="salaire">Salaire</label>
+														<input type="text" class="form-control inputCustom" id="salaire" name="salaire">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<label for="description">Description</label>
+														<textarea class="form-control inputCustom" id="description" name="description" rows="3"></textarea>
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col">
+														<button type="submit" class="btn btn-primary btn-sm rounded btnWidth">Ajouter</button>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-note text-center mt-2">
+														<i>PS : les annonces seront publiées après l'accord du consultant du site</i>
+													</div>
+												</div>
+											</form>
 										</div>
-										<div class="row">
-											<div class="col">
-												<label for="poste">Poste</label>
-												<input type="text" class="form-control inputCustom" id="poste" name="poste">
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<label for="horaire">Horaire</label>
-												<input type="text" class="form-control inputCustom" id="horaire" name="horaire">
-											</div>
-											<div class="col">
-												<label for="salaire">Salaire</label>
-												<input type="text" class="form-control inputCustom" id="salaire" name="salaire">
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<label for="description">Description</label>
-												<textarea class="form-control inputCustom" id="description" name="description" rows="3"></textarea>
-											</div>
-										</div>
-										<br>
-										<div class="row">
-											<div class="col">
-												<button type="submit" class="btn btn-primary btn-sm rounded btnWidth">Ajouter</button>
-											</div>
-										</div>
-									</form>
-								</div>
 
-							</div>
-
-							{# Coordonées du recruteur #}
-							<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-								<div class="row bg-light">
-									<div class="card-header bg-light mb-1">
-										<h3 class="text-center">Coordonnées du recruteur</h3>
 									</div>
-									<div class="col-lg-6">
-										<div class="card mb-3 mb-lg-0">
-											<div class="card-header bg-light">
-												<h3 class="text-center">Coordonnée enregistrée</h3>
+
+									{# Coordonées du recruteur #}
+									<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+										<div class="row bg-light">
+											<div class="card-header bg-light mb-1">
+												<h3 class="text-center">Coordonnées du recruteur</h3>
 											</div>
+											<div class="col-lg-6">
+												<div class="card mb-3 mb-lg-0">
+													<div class="card-header bg-light">
+														<h3 class="text-center">Coordonnée enregistrée</h3>
+													</div>
 
-											<div class="card-header bg-light">
+													<div class="card-header bg-light">
 
-												<input
-												type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
-												{# <div >{{dump(app.user.recruteur.id)}}</div> #}
-												<p class="text-center fs-5">
-													Nom de la société :
-													<span class="fs-2 ps-2 pe-2 bg-warning">{{ app.user.recruteur.nomEntreprise }}</span>
-												</p>
-												<address class="fs-5 text-center">Adresse :
-													{{ app.user.recruteur.adresse }}<br>Code postal :
-													{{ app.user.recruteur.codepostal }}<br>Ville :
-													{{ app.user.recruteur.ville}}
-													<br><br>
+														<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
+														{# <div >{{dump(app.user.recruteur.id)}}</div> #}
+														<p class="text-center fs-5">
+															Nom de la société :
+															<span class="fs-2 ps-2 pe-2 bg-warning">{{ app.user.recruteur.nomEntreprise }}</span>
+														</p>
+														<address class="fs-5 text-center">Adresse :
+															{{ app.user.recruteur.adresse }}<br>Code postal :
+															{{ app.user.recruteur.codepostal }}<br>Ville :
+															{{ app.user.recruteur.ville}}
+															<br><br>
 
-													<p class="fs-5">Pays : France</p>
+															<p class="fs-5">Pays : France</p>
 
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="card">
+														<div class="card-header bg-light">
+															<h3 class="text-center">Modifier les Coordonnées</h3>
+														</div>
+														<div class="card-body bg-light">
+															<form method="POST" action="{{ path('modif_coordonnees') }}" class="bg-light">
+																<div class="row">
+
+																	<div class="form-group col-md-12 mb-2">
+																		<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
+																		<label>Adresse
+																			<span class="required">*</span>
+																		</label>
+																		<input required="" class="form-control inputCustom" name="adresse" type="text" value="{{ app.user.recruteur.adresse }}">
+																	</div>
+																	<div class="form-group col-md-12 mb-2">
+																		<label>Code postal
+																			<span class="required">*</span>
+																		</label>
+																		<input required="" class="form-control inputCustom" name="codepostal" value="{{ app.user.recruteur.codepostal }}">
+																	</div>
+
+																	<div class="form-group col-md-12 mb-2">
+																		<label>Ville
+																			<span class="required">*</span>
+																		</label>
+																		<input required="" class="form-control inputCustom" name="ville" value="{{ app.user.recruteur.ville }}">
+																	</div>
+																	<div class="form-group col-md-12 mb-2">
+																		<label>Site internet</label>
+																		<input class="form-control inputCustom" name="siteinternet" value="{{ app.user.recruteur.siteinternet }}">
+																	</div>
+																	<div class="col-md-12">
+																		<button type="submit" class="btn btn-primary btn-sm rounded btnWidth" name="submit" value="Submit">Valider</button>
+																	</div>
+																</div>
+															</form>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="col-lg-6">
-											<div class="card">
+
+										{# Détails du compte #}
+										<div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+											<div class="card bg-warning">
+												<div class="card-header ">
+													<h3 class="text-center">Détails du compte</h3>
+												</div>
 												<div class="card-header bg-light">
-													<h3 class="text-center">Modifier les Coordonnées</h3>
-												</div>
-												<div class="card-body bg-light">
-													<form method="POST" action="{{ path('modif_coordonnees') }}" class="bg-light">
+
+													<form method="post" name="enq">
 														<div class="row">
-
-															<div class="form-group col-md-12 mb-2">
-																<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
-																<label>Adresse
+															<div class="form-group col-md-3 mb-2">
+																<label>Nom de l'entreprise</label>
+																{% if app.user.recruteur is defined and app.user.recruteur is not null %}
+																	<input class="form-control inputCustom" name="nom" type="text" value="{{ app.user.recruteur.nomEntreprise }}">
+																{% else %}
+																	<input class="form-control inputCustom" name="nom" type="text" value="">
+																{% endif %}
+															</div>
+															<div class="form-group col-md-4 mb-2">
+																<label>Address email</label>
+																<input class="form-control inputCustom" name="email" type="email" value="{{ app.user.email }}">
+															</div>
+															<div class="form-group col-md-5 mb-2">
+																<label>Mot de passe actuel
 																	<span class="required">*</span>
 																</label>
-																<input required="" class="form-control inputCustom" name="adresse" type="text" value="{{ app.user.recruteur.adresse }}">
-															</div>
-															<div class="form-group col-md-12 mb-2">
-																<label>Code postal
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control inputCustom" name="codepostal" value="{{ app.user.recruteur.codepostal }}">
-															</div>
-
-															<div class="form-group col-md-12 mb-2">
-																<label>Ville
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control inputCustom" name="ville" value="{{ app.user.recruteur.ville }}">
-															</div>
-															<div class="form-group col-md-12 mb-2">
-																<label>Site internet</label>
-																<input class="form-control inputCustom" name="siteinternet" value="{{ app.user.recruteur.siteinternet }}">
-															</div>
-															<div class="col-md-12">
-																<button type="submit" class="btn btn-primary btn-sm rounded btnWidth" name="submit" value="Submit">Valider</button>
+																<input class="form-control inputCustom" name="password" type="password" value="{{ app.user.password }}">
 															</div>
 														</div>
+
+														<div class="row">
+															<div class="form-group col-md-3 mb-2"></div>
+															<div class="form-group col-md-6 mb-2">
+																<label>Nouveau mot de passe
+																	<span class="required">*</span>
+																</label>
+																<input required="" class="form-control inputCustom" name="npassword" type="password">
+															</div>
+															<div class="form-group col-md-3 mb-2"></div>
+														</div>
+
+														<div class="row">
+															<div class="form-group col-md-3 mb-2"></div>
+															<div class="form-group col-md-6 mb-2">
+																<label>Confirmer le mot de passe
+																	<span class="required">*</span>
+																</label>
+																<input required="" class="form-control inputCustom" name="cpassword" type="password">
+																<div class="form-group col-md-3 mb-2"></div>
+															</div>
+														</div>
+
+
+														<div class="row">
+															<div class="form-group col-md-3 mb-2"></div>
+															<div class="col-md-6">
+																<button type="submit" class="btn btn-primary btn-sm rounded btnWidth" name="submit" value="Submit">Valider</button>
+															</div>
+															<div class="form-group col-md-3 mb-2"></div>
+														</div>
+
 													</form>
 												</div>
 											</div>
 										</div>
-									</div>
-								</div>
 
-								{# Détails du compte #}
-								<div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
-									<div class="card bg-warning">
-										<div class="card-header ">
-											<h3 class="text-center">Détails du compte</h3>
-										</div>
-										<div class="card-header bg-light">
-
-											<form method="post" name="enq">
-												<div class="row">
-													<div class="form-group col-md-3 mb-2">
-														<label>Nom de l'entreprise</label>
-														{% if app.user.recruteur is defined and app.user.recruteur is not null %}
-															<input class="form-control inputCustom" name="nom" type="text" value="{{ app.user.recruteur.nomEntreprise }}">
-														{% else %}
-															<input class="form-control inputCustom" name="nom" type="text" value="">
-														{% endif %}
-													</div>
-													<div class="form-group col-md-4 mb-2">
-														<label>Address email</label>
-														<input class="form-control inputCustom" name="email" type="email" value="{{ app.user.email }}">
-													</div>
-													<div class="form-group col-md-5 mb-2">
-														<label>Mot de passe actuel
-															<span class="required">*</span>
-														</label>
-														<input class="form-control inputCustom" name="password" type="password" value="{{ app.user.password }}">
-													</div>
+										{# Suppression du compte #}
+										<div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
+											<div class="card">
+												<div class="card-header bg-light">
+													<h3 class="text-center">Suppression du compte</h3>
 												</div>
+												<div class="card-header bg-light ">
+													<p class="text-center pt-4">Vous avez la possibilité de supprimer votre compte, si vous le souhaitez
+													</p>
+													<div class="mt-4 mb-2">
+														<div class="row">
+															<div class="form-group col-md-3 mb-2"></div>
+															<div class="form-group col-md-6 mb-2">
+																<button type="submit" class="btn btn-primary py-2 my-2 btnWidth" name="submit" value="Submit">Suppression</button>
+															</div>
+															<div class="form-group col-md-3 mb-2"></div>
 
-												<div class="row">
-													<div class="form-group col-md-3 mb-2"></div>
-													<div class="form-group col-md-6 mb-2">
-														<label>Nouveau mot de passe
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control inputCustom" name="npassword" type="password">
+														</div>
+
 													</div>
-													<div class="form-group col-md-3 mb-2"></div>
-												</div>
-
-												<div class="row">
-													<div class="form-group col-md-3 mb-2"></div>
-													<div class="form-group col-md-6 mb-2">
-														<label>Confirmer le mot de passe
-															<span class="required">*</span>
-														</label>
-														<input required="" class="form-control inputCustom" name="cpassword" type="password">
-														<div class="form-group col-md-3 mb-2"></div>
-													</div>
-												</div>
-
-
-												<div class="row">
-													<div class="form-group col-md-3 mb-2"></div>
-													<div class="col-md-6">
-														<button type="submit" class="btn btn-primary btn-sm rounded btnWidth" name="submit" value="Submit">Valider</button>
-													</div>
-													<div class="form-group col-md-3 mb-2"></div>
-												</div>
-
-											</form>
-										</div>
-									</div>
-								</div>
-
-								{# Suppression du compte #}
-								<div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
-									<div class="card">
-										<div class="card-header bg-light">
-											<h3 class="text-center">Suppression du compte</h3>
-										</div>
-										<div class="card-header bg-light ">
-											<p class="text-center pt-4">Vous avez la possibilité de supprimer votre compte, si vous le souhaitez
-											</p>
-											<div class="mt-4 mb-2">
-												<div class="row">
-													<div class="form-group col-md-3 mb-2"></div>
-													<div class="form-group col-md-6 mb-2">
-														<button type="submit" class="btn btn-primary py-2 my-2 btnWidth" name="submit" value="Submit">Suppression</button>
-													</div>
-													<div class="form-group col-md-3 mb-2"></div>
 
 												</div>
-
 											</div>
-
 										</div>
+
 									</div>
 								</div>
-
 							</div>
 						</div>
 					</div>
+
+
 				</div>
 			</div>
 
 
-		</div>
-	</div>
+	{# //Messages pour que la durée ne soit que de 3 secondes #}
+	<script type="text/javascript">
+		// Diparition du message après 3 secondes
+document.addEventListener('DOMContentLoaded', function () {
+var alerts = document.querySelectorAll('.alert');
+
+// Parcourir tous les messages d'alerte
+for (var i = 0; i < alerts.length; i++) {
+var alert = alerts[i];
+
+// Créer une animation pour faire disparaître le message d'alerte
+var fadeOut = new KeyframeEffect(alert, [
+{
+opacity: 1
+}, {
+opacity: 0
+}
+], {
+duration: 300,
+iterations: 1,
+fill: 'forwards'
+});
+
+var animation = new Animation(fadeOut, document.timeline);
+
+// Démarrer l'animation après un délai
+setTimeout(function () {
+animation.play();
+}, 3000); // 3 secondes
+}
+});
+	</script>
+
+		{% endblock %}
 
 
-{% endblock %}
-
-{% block javascripts %}{% endblock %}

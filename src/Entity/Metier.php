@@ -47,6 +47,12 @@ class Metier
         return $this;
     }
 
+    public function __toString()    //Il faut renvoyer un "get' ou la propriété déclaré est un "String"
+    {
+        return $this->getNom();
+    }
+
+
     /**
      * @return Collection<int, Candidat>
      */

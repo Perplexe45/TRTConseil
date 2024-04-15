@@ -22,11 +22,13 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-    ->add('recruteur', RecruteurType::class, [
+  
+
+    ->add('candidat', CandidatType::class, [
         'label' => false,
     ])
 
-    ->add('candidat', CandidatType::class, [
+    ->add('recruteur', RecruteurType::class, [
         'label' => false,
     ])
 

@@ -26,12 +26,18 @@
 		{% include "header/index.html.twig" %}
 		{% block body %}{% endblock %}
 
-		{% for messages in app.flashes('succes') %}
-			<div class="flash-succes">
-				{{ messages }}
-			</div>
-		{% endfor %}
+		
+		<div class="container" id="flash-messages">
+		<div class="messages-container">
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+			{% endfor %}
 
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success centered" role="alert">{{ message }}</div>
+			{% endfor %}
+		</div>
+	</div>
 
 		{% include "footer/index.html.twig" %}
 

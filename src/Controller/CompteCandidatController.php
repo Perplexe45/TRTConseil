@@ -7,15 +7,16 @@ use App\Entity\Metier;
 use App\Entity\CandidatAnnonce;
 use App\Repository\CandidatRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Doctrine\Persistence\ManagerRegistry;
 
 class CompteCandidatController extends AbstractController
 {
@@ -28,6 +29,7 @@ class CompteCandidatController extends AbstractController
 
     /////////////////////////Page d'accueil/////////////////////////////
     #[Route('/compte/candidat', name: 'app_compte_candidat')]
+    #[IsGranted('ROLE_CANDIDAT')]
     public function index(RequestStack $requestStack, EntityManagerInterface $entityManager): Response
     {
      // Vérifiez si l'utilisateur est connecté
@@ -53,14 +55,12 @@ class CompteCandidatController extends AbstractController
         ]);
     }
 
-    //////////////////Modif des coordonnées du candidat//////////////////
+    /////////////////Modif des coordonnées du candidat//////////////////
     #[Route('/compte/candidat/mofifCoordonnees', name: 'coordonnees_candidat')]
     public function modifCoordonnees(Request $request, CandidatRepository $candidatRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         // Récup l'utilisateur connecté
         $user = $this->getUser();
-
-
         $metiers = $entityManager->getRepository(Metier::class)->findAll();
 
         // Vérifie que l'utilisateur a le rôle "ROLE_CANDIDAT"
@@ -83,44 +83,51 @@ class CompteCandidatController extends AbstractController
                 throw $this->createNotFoundException('Candidat non trouvé');
             }
 
-            //Recupération du CV en fichier pdf
+            //Recupération du CV en fichier pdf si existant
             $cvFile = $request->files->get('cv-file');
-            if ($cvFile instanceof UploadedFile && $cvFile->guessExtension() === 'pdf') {
-                $fileName = $cvFile->getClientOriginalName();
-
-                // Déplacer le fichier téléversé vers le répertoire de destination
-                $cvFile->move($this->getParameter('cv_directory'), $fileName);
-                $candidat->setCv($fileName);
-            } else {  //ce n'est pas un fichier pdf
-                $this->addFlash('error', 'Le fichier doit être un fichier PDF.');
+            if (!empty($cvFile)) {
+                if ($cvFile instanceof UploadedFile && $cvFile->guessExtension() === 'pdf') {
+                    $fileName = $cvFile->getClientOriginalName();
+    
+                    // Déplace le fichier téléversé vers le répertoire de destination
+                    $cvFile->move($this->getParameter('cv_directory'), $fileName);
+                    $candidat->setCv($fileName);
+                    //dd($candidat);
+                } else {  //ce n'est pas un fichier pdf
+                    $this->addFlash('error', 'Le fichier doit être un fichier PDF.');
+                }
             }
-
+            
+            ///////Récupération des champs de Twig///////////////////
             $nom = $request->request->get('nom');
             $prenom = $request->request->get('prenom');
             $email = $request->request->get('email');
+            $motdepasseModif = $request->get('modifpassword');
+            $confirmpassword = $request->get('confirmpassword');
 
-            //Modif du mot de passe si un des 2 champs ont été remplis
-            if (!empty($motdepasseModif) && !empty($motdepasseMofif1)) {
-
-                // Vérifie si les deux champs de mot de passe ont le même mot de passe
-                if ($motdepasseModif === $motdepasseMofif1) {
-                    $userPassword = new User;
-                    // Encode le mot de passe
-                    $userPassword->setPassword(
-                        $userPasswordHasher->hashPassword($userPassword, $motdepasseModif)
-                    );
+            
+            /////////////////////////Modif du mot de passe///////////////////////////
+            if (!empty($motdepasseModif) && !empty($confirmpassword)) {
+                // Modif du mot de passe si les 2 champs ont été remplis
+                if ($motdepasseModif === $confirmpassword) {
+                    // Mettre à jour le mot de passe de l'utilisateur existant
+                    if ($user instanceof User) {
+                        // Encode le mot de passe avec Bcrypt et un coût de 13
+                        $encodedPassword = password_hash($motdepasseModif, PASSWORD_BCRYPT, ['cost' => 13]);
+                        $user->setPassword($encodedPassword);
+                    }
                 } else {
                     // Les mots de passe ne correspondent pas.
-                    throw $this->createAccessDeniedException()('Les mots de passe ne sont pas identiques.');
+                    throw $this->createAccessDeniedException('Les mots de passe ne sont pas identiques.');
                 }
             }
-
-            // MAJ de l'entreprise
+            
+            // MAJ des coordonnées
             $candidat->setNom($nom);
             $candidat->setPrenom($prenom);
             $candidat->setEmail($email);
 
-            // Enregistre l'annonce en base de données
+            // Enregistre lles coordonnées en base de données
             $entityManager->flush();
 
             // Affiche un message de succès à l'utilisateur

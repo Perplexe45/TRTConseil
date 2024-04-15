@@ -27,8 +27,18 @@ class AnnonceController extends AbstractController
     #[Route('/annonces', name: 'app-listAnnonces')]
     public function index(Request $request): Response
     {
-        // Récupérer toutes les annonces publiées
-        $annonces = $this->entityManager->getRepository(Annonce::class)->findBy(['publie' => true]);
+        // Requête pour récupérer les annonces validées par le consultant
+        //table : Annonce et Recruteur 
+        $annonces = $this->entityManager->createQueryBuilder()
+            ->select('a')
+            ->from('App\Entity\Annonce', 'a')
+            ->leftJoin('a.recruteur', 'r')
+            ->where('a.publie = :publie')
+            ->andWhere('r.approbationConsultant = :approuve')
+            ->setParameter('publie', true)
+            ->setParameter('approuve', true)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('annoncesValidees/index.html.twig', [
             'annonces' => $annonces,
@@ -40,9 +50,6 @@ class AnnonceController extends AbstractController
     #[Route('/annonces/ajout', name: 'app_ajoutAnnonces')]
     public function ajouterAnnonce(): Response
     {
-        /*   // Récupérer toutes les annonces publiées
-        $annonces = $this->entityManager->getRepository(Annonce::class)->findBy(['publie' => true]); */
-        /*  dd($annonces); */
 
         return $this->render(
             'annonces/ajoutAnnonces.html.twig'/* , [
@@ -51,49 +58,58 @@ class AnnonceController extends AbstractController
     }
 
     ////////////////////////////////////////////////////////////////////////
-    ////////////////postuler a une annonce pour un candidat/////////////////
+    ////////////////postuler a une annonce par un candidat/////////////////
     #[Route('/annonces/candidat/{annonce}/{candidat}', name: 'app_postuler')]
     public function postuler(Annonce $annonce, Candidat $candidat, EntityManagerInterface $entityManager, RequestStack $requestStack, Request $request): Response
     {
-        // Récupérer l'utilisateur connecté
+        // Récupére l'utilisateur connecté
         $candidatUser = $this->getUser();
+        
 
-        if ($candidatUser instanceof User) {
+
+        //// Vérifie si l'utilisateur est connecté et est candidat
+        if ($candidatUser instanceof User && in_array('ROLE_CANDIDAT', $candidatUser->getRoles())) {
             //Recup du CV du candidat
             $cv = $candidatUser->getCandidat()->getCv();
+            $candidatApprouve = $candidatUser->getCandidat()->isApprobationConsultant();
+            $candidatAvecCV = $candidatUser->getCandidat()->getCv();
+            
+        } 
+        if ($candidatAvecCV === NULL) {
+            $this->addFlash('error', 'Vous n\'avez pas laissé de CV au recruteur');
+            return $this->redirectToRoute('app_home');
         }
-
-        // Vérifier si l'utilisateur est connecté
-        if (!$candidatUser) {
-            // Rediriger l'utilisateur vers la page de connexion
-            return $this->redirectToRoute('app_login');
-        }
-        // Vérifie que l'utilisateur a le rôle "ROLE_CANDIDAT"
-        if (!in_array('ROLE_CANDIDAT', $candidatUser->getRoles())) {
-            // Redirige l'utilisateur vers la page de connexion car mauvaise identif
+        
+      
+        if (!$candidatApprouve) {
+            // Redirige l'utilisateur vers la page de connexion
             return $this->redirectToRoute('app_login');
         }
 
         // Vérifiez si l'utilisateur a cliqué sur le bouton "Postuler"
-        if (!in_array('ROLE_CANDIDAT', $candidatUser->getRoles())) {
-            if ($request->query->get('postuler') && !$candidatUser instanceof User) {
-                // Récupérez l'ID de l'annonce de la requête
-                $annonceId = $request->query->get('annonce');
+        if ($request->query->get('postuler') && !$candidatUser instanceof User) {
 
-                // Récupérez l'objet annonce de la base de données
-                $annonce = $this->entityManager->getRepository(Annonce::class)->find($annonceId);
-
-                if (!$annonce) {
-                    // L'annonce n'existe pas, redirigez vers la page d'erreur
-                    return $this->redirectToRoute('app_error');
-                }
-
-                // Stockez l'ID de l'annonce dans la session
-                $request->getSession()->set('annonceId', $annonce->getId());
-
+            if ($candidatAvecCV == "" )  {
                 return $this->redirectToRoute('app_login');
             }
+            dd($candidatAvecCV);
+
+            // Récupére l'ID de l'annonce de la requête
+            $annonceId = $request->query->get('annonce');
+
+            // Récupére l'objet annonce de la base de données
+            $annonce = $this->entityManager->getRepository(Annonce::class)->find($annonceId);
+
+            if (!$annonce) {
+                // L'annonce n'existe pas, redirige vers la page d'erreur
+                return $this->redirectToRoute('app_error');
+            }
+
+            // Stocke l'ID de l'annonce dans la session
+            $request->getSession()->set('annonceId', $annonce->getId());
+            return $this->redirectToRoute('app_login');
         }
+
 
         // Créer une nouvelle instance de CandidatAnnonce
         $candidatAnnonce = new CandidatAnnonce();
@@ -102,16 +118,17 @@ class AnnonceController extends AbstractController
         $candidatAnnonce->setCv($cv);
         $candidatAnnonce;
 
-        // Enregistrer la candidature dans la base de données
+        // Enregistre la candidature dans la base de données
         $entityManager->persist($candidatAnnonce);
         $entityManager->flush();
 
         //Message indiquant que l'enregistrement a bien eu lieu
-        $this->addFlash('success', 'Merci d\avoir postulé pour cette offre. Le recruteur vous contactera');
+        $this->addFlash('success', 'Merci d\'avoir postulé pour cette offre. Le recruteur vous contactera');
 
-        // Rediriger l'utilisateur vers une page de confirmation ou une autre page
+        // Redirige l'utilisateur vers une page de confirmation ou une autre page
         return $this->redirectToRoute('app-listAnnonces');
     }
+
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////////Réponses des candidats aux annonces///////////////////////
@@ -120,7 +137,7 @@ class AnnonceController extends AbstractController
     {
         // Convertir l'identifiant de l'annonce en entier
         $id = intval($id);
-       
+
         // Récupérer l'annonce à partir de l'identifiant du param de la route
         $annonce = $annonceRepository->find($id);
         /* dd($annonce); */

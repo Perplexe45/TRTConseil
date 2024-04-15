@@ -14,8 +14,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardConsultantController extends AbstractDashboardController
 {
-    #[IsGranted('ROLE_CONSULTANT')]
+  
     #[Route('/consultant', name: 'app_consultant')]
+    #[IsGranted('ROLE_CONSULTANT')]
     public function index(): Response
     {
         return $this->render('security/dashboard_consultant.html.twig');

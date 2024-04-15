@@ -4,5 +4,7 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-
+app_register:
+    path: /register
+    controller: App\Controller\RegistrationController::register
             

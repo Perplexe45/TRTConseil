@@ -10,20 +10,31 @@
 			<h1 class="pt-1">Réponse de l'annonce</h1>
 		</div>
 
-		<div class="m-5">
-			<h3 class="text-center">Détail :
-				<b>{{ annonce.poste }}</b>
-				-
-				<i>{{ annonce.lieu }}</i>
-				-
-				{{ annonce.salaire }}</h3>
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-2"></div>
+			<div class="col-lg-6 col-md-6 col-sm-8">
+				<div class="m-2">
+					<p class="display-4">
+						Poste :
+						<b>{{ annonce.poste }}</b><br>
+						Lieu :
+						<b>{{ annonce.lieu }}</b><br>
+						Salaire:
+						<b>{{ annonce.salaire }}</b><br><br>
+						<span style="text-decoration: underline;">Description :</span>
+						{{ annonce.description }}
+					</p>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-sm-2"></div>
 		</div>
 
-	{# {{ dump(annonce) }}  #}
 
-		<div class="mb-5">
-			<table class="table table-striped table-hover  ">
-				<thead class="thead-dark">
+		{# {{ dump(annonce) }}  #}
+
+		<div class="mt-5">
+			<table class="table table-striped table-hover table-bordered table-border ">
+				<thead class="colorThead text-center">
 					<tr>
 						<th>ID</th>
 						<th>Prénom</th>
@@ -33,17 +44,19 @@
 						<th>CV</th>
 					</tr>
 				</thead>
-				<tbody>
+					<tbody>
 
 					{# {{ dump(annonce.candidatAnnonces) }}  #}
 					{% for candidatAnnonce in annonce.candidatAnnonces %}
 						<tr>
-							<td>{{ candidatAnnonce.id }}</td>
+							<td>{{ candidatAnnonce.annonce.id }}</td>
 							<td>{{ candidatAnnonce.candidat.prenom }}</td>
 							<td>{{ candidatAnnonce.candidat.nom }}</td>
 							<td>{{ candidatAnnonce.candidat.metier }}</td>
 							<td>{{ candidatAnnonce.candidat.email}}</td>
-							<td>{{ candidatAnnonce.candidat.cv }}</td>
+							<td class="text-center" ><button type="button" class="cv-button btn btn-primary">
+								<a href="{{ asset('uploads/' ~ candidatAnnonce.candidat.cv) }}" download="{{ candidatAnnonce.candidat.cv }}" class="cv-link">
+								Télécharger le CV</a></button></td>
 						</tr>
 					{% endfor %}
 				</tbody>

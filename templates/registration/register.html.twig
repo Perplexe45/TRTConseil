@@ -5,17 +5,23 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-	<section data-bs-version="5.1" class="form7 cid-u5uXzWpi1R" id="form7-r">
+	<section data-bs-version="5.1" class="cid-u5uXzWpi1R" id="form7-r">
 		<div class=" container">
-			<div class="mbr-section-head">
-				<h3 class="mbr-fonts-style align-center display-2">
-					<strong>Inscription</strong>
-				</h3>
-
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<div class="mbr-section-head titleH1 fs-2">
+						<h1 class="mbr-fonts-style align-center pt-1">
+							Inscription
+						</h1>
+					</div>
+				</div>
+				<div class="col-md-3"></div>
 			</div>
-			<div class="row justify-content-center mt-3">
-				<div class="col-lg-6 mx-auto mbr-form formSignup">
-					<div class="dragArea row">
+
+			<div class="row justify-content-center mt-5">
+				<div class="col-lg-6 mx-auto">
+					<div class="card bg-light rounded rounded-5	 row">
 						<div class="col-lg-12 col-md-12 col-sm-12 form-group" data-for="name">
 							<form action="" method="POST" class="mx-auto" data-form-title="Form Name">
 								<fieldset class="align-center">
@@ -23,12 +29,12 @@
 										<legend>Vous êtes</legend>
 									</div>
 
-
 									<input type="radio" name="categorie" value="Candidat" id="categorie_candidat"/>
 									<label for="Candidat">Candidat</label>
 
 									<input class="ms-3" type="radio" name="categorie" value="Recruteur" id="categorie_recruteur"/>
 									<label for="Recruteur">Recruteur</label>
+
 
 									<hr>
 								</fieldset>
@@ -40,140 +46,157 @@
 										<div class="flash-{{ label }}">
 											{% for message in messages %}
 												<div class="flash-messageSelect flash-messageSuccess">{{ message }}</div>
-
 											{% endfor %}
 										</div>
 									{% endfor %}
 								</div>
 
-								<script>
-									document.addEventListener('DOMContentLoaded', function () {
-// Sélectionner les éléments avec la classe .flash-messageSelect et la classe .flash-messageSuccess
-
-// //////////////////////////////////////////////////////////////////////////////////////////
-// Fonction asynchrone pour que le message d'erreur soit visible pendant 4 secondes du sélect
-let flashMessagesSelect = document.querySelectorAll('.flash-messageSelect');
-async function cacherMessagesFlash() { // Parcourir tous les éléments .flash-messageSelect
-for (let flashMessage of flashMessagesSelect) { // Cacher le message flash après 4 secondes
-await new Promise(resolve => setTimeout(resolve, 4000));
-flashMessage.style.display = 'none';
-}
-}
-// Appeler la fonction pour cacher les messages flash
-cacherMessagesFlash();
-// ///////////////////////////////Fin du traitement////////////////////////////////////////
-
-// ////////////////////Cacher des champs selon la sélection////////////////////////////////////
-
-// Sélectionner les éléments radio et les conteneurs du métier, du candidat et du recruteur
-const categorieCandidat = document.querySelectorAll('categorie_candidat');
-const categorieRecruteur = document.querySelectorAll('categorie_recruteur');
-const metierContainer = document.querySelectorAll('metier_container');
-const candidatContainer = document.querySelectorAll('candidat_container');
-const recruteurContainer = document.querySelectorAll('recruteur_container');
-
-// Masquer les conteneurs du candidat et du recruteur par défaut
-candidatContainer.style.display = 'none';
-recruteurContainer.style.display = 'none';
-
-// Masquer le conteneur du métier par défaut
-metierContainer.style.display = 'none';
-
-// Ajouter des écouteurs d'événements aux éléments radio
-categorieCandidat.addEventListener('change', function () {
-if (this.checked) { // Afficher le conteneur du candidat, masquer le conteneur du recruteur et afficher le conteneur du métier
-candidatContainer.style.display = 'block';
-recruteurContainer.style.display = 'none';
-metierContainer.style.display = 'block';
-}
-});
-
-categorieRecruteur.addEventListener('change', function () {
-if (this.checked) { // Masquer le conteneur du candidat, afficher le conteneur du recruteur et masquer le conteneur du métier
-candidatContainer.style.display = 'none';
-recruteurContainer.style.display = 'block';
-metierContainer.style.display = 'none';
-}
-});
-
-
-// ///////////////////////////////////////////////////////////////////////////////
-// Fonction asynchrone pour gérer les messages flash et la redirection
-let flashMessagesSuccess = document.querySelectorAll('.flash-messageSuccess');
-let flashMessageOk = false;
-async function gererMessagesFlashEtRedirection() {
-for (let flashMessage of flashMessagesSuccess) { // Cacher le message flash après 4 secondes
-await new Promise(resolve => setTimeout(resolve, 4000));
-flashMessage.style.display = 'none';
-flashMessageOk = true;
-}
-}
-});
-
-// Appeler la fonction pour gérer les messages flash et la redirection
-gererMessagesFlashEtRedirection();
-
-console.log('flashMessageOk');
-// Redirection sur la page d'accuel
-if (flashMessageOk === true) {
-window.location.href = "{{ path('app_home') }}";
-}
-// //////////////////F////////////////////////////////////
-								</script>
-
 
 								{{ form_errors(registrationForm) }}
 								{{ form_start(registrationForm) }}
 
-								<div class="row">
-									<div id="candidat_container" class="col mb-3 rounded p-2">
-										{{ form_label(registrationForm.candidat.nom) }}
-										{{ form_widget(registrationForm.candidat.nom) }}
+								<div
+									class="row">
+									<!-- Ajout de la classe row pour centrer les champs -->
+									<div class="col-md-2"></div>
+									<div class="col-md-8">
+										<div id="candidat_container" class="col mb- rounded p-2">
+											{{ form_label(registrationForm.candidat.nom) }}
+											{{ form_widget(registrationForm.candidat.nom) }}
+										</div>
+
+										<div id="metier_container" class="col mb-1 rounded p-2">
+											{{ form_label(registrationForm.metier) }}
+											{{ form_widget(registrationForm.metier) }}
+										</div>
+
+										<div id="recruteur_container" class="col mb-3 p-2">
+											{{ form_label(registrationForm.recruteur.nomEntreprise) }}
+											{{ form_widget(registrationForm.recruteur.nomEntreprise) }}
+										</div>
+
+										<div class="form-group col mb-3 mt-1 ">
+											{{ form_row(registrationForm.email) }}
+										</div>
+
+										<div class="form-group col mb-3">
+											{{ form_row(registrationForm.plainPassword, {label: 'mot de passe'}) }}
+										</div>
+
+										<div class="chek-form">
+											{{ form_row(registrationForm.agreeTerms) }}
+										</div>
+
+										<div class="mbr-section-btn align-center">
+											<button type="submit" class="btn btn-primary display-4 btnWidth">Valider</button>
+										</div>
+
+										<div class="form-note text-center">Vous avez déjà un compte?
+											<a href="/login">Connexion</a>
+										</div>
 									</div>
-
-									<div id="metier_container" class="col mb-1 rounded p-2">
-										{{ form_label(registrationForm.metier, ) }}
-										{{ form_widget(registrationForm.metier) }}
-									</div>
-
-									<div id="recruteur_container" class="col mb-3 p-2">
-										{{ form_label(registrationForm.recruteur.nomEntreprise) }}
-										{{ form_widget(registrationForm.recruteur.nomEntreprise) }}
-									</div>
-
-
+									<div class="col-md-2"></div>
 								</div>
+								<!-- Fermeture de la classe row -->
 
-								<div class="row">
-									<div class="form-group col mb-3 mt-1 ">
-										{{ form_row(registrationForm.email) }}
-									</div>
+								{{ form_end(registrationForm) }}
 
-									<div class="form-group col mb-3">
-										{{ form_row(registrationForm.plainPassword, {label: 'mot de passe'}) }}
-									</div>
 
-									<div class="chek-form ">
-										{{ form_row(registrationForm.agreeTerms) }}
-									</div>
+							</form>
 
-									<div class="mbr-section-btn align-center">
-										<button type="submit" class="btn btn-primary display-4 btnWidth">Valider</button>
-									</div>
-
-									<div class="form-note text-center">Vous avez déjà un compte?
-										<a href="/login">Connexion</a>
-									</div>
-
-									{{ form_end(registrationForm) }}
-								</div>
-
-							</div>
-						</form>
-
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>{% endblock %}
+	</section>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { // Sélectionne les éléments radio et les conteneurs du métier, du candidat et du recruteur
+		const categorieCandidat = document.querySelector('#categorie_candidat');
+		const categorieRecruteur = document.querySelector('#categorie_recruteur');
+		const metierContainer = document.getElementById('metier_container');
+		const candidatContainer = document.getElementById('candidat_container');
+		const recruteurContainer = document.getElementById('recruteur_container');
+	
+
+	 // Fonction pour griser les champs du candidat
+    function griserChampsCandidat() {
+        candidatContainer.querySelectorAll('input, select').forEach(function (element) {
+            element.disabled = false;
+        });
+        recruteurContainer.querySelectorAll('input, select').forEach(function (element) {
+            element.disabled = true;
+        });
+		 // Active le champ de sélection du métier pour les candidats
+        metierContainer.querySelectorAll('select').forEach(function (element) {
+            element.disabled = false;
+        });	
+    }
+
+    // Fonction pour griser les champs du recruteur
+    function griserChampsRecruteur() {
+        recruteurContainer.querySelectorAll('input, select').forEach(function (element) {
+            element.disabled = false;
+        });
+        candidatContainer.querySelectorAll('input, select').forEach(function (element) {
+            element.disabled = true;
+        });
+		 metierContainer.querySelectorAll('select').forEach(function (element) {
+            element.disabled = true;
+        });
+    }
+
+    // Ajoute des écouteurs d'événements aux éléments radio
+    categorieCandidat.addEventListener('change', function () {
+        if (this.checked) {
+            griserChampsCandidat();
+        }
+    });
+
+    categorieRecruteur.addEventListener('change', function () {
+        if (this.checked) {
+            griserChampsRecruteur();
+        }
+    });
+
+    // Applique le statut initial lors du chargement de la page
+    if (categorieCandidat.checked) {
+        griserChampsCandidat();
+    } else if (categorieRecruteur.checked) {
+        griserChampsRecruteur();
+    }
+
+
+// Fonction asynchrone pour que le message d'erreur soit visible pendant 4 secondes du sélect
+let flashMessagesSelect = document.querySelectorAll('.flash-messageSelect');
+async function cacherMessagesFlash() {
+for (let flashMessage of flashMessagesSelect) {
+await new Promise(resolve => setTimeout(resolve, 4000));
+flashMessage.style.display = 'none';
+}
+}
+// Appele la fonction pour cacher les messages flash
+cacherMessagesFlash();
+
+
+// Fonction asynchrone pour gérer les messages flash et la redirection
+async function gererMessagesFlashEtRedirection() {
+let flashMessagesSuccess = document.querySelectorAll('.flash-messageSuccess');
+let flashMessageOk = false;
+for (let flashMessage of flashMessagesSuccess) {
+await new Promise(resolve => setTimeout(resolve, 4000));
+flashMessage.style.display = 'none';
+flashMessageOk = true;
+}
+// Redirection sur la page d'accueil
+if (flashMessageOk === true) {
+window.location.href = "{{ path('app_home') }}";
+}
+}
+
+// Appele la fonction pour gérer les messages flash et la redirection
+gererMessagesFlashEtRedirection();
+});
+	</script>
+{% endblock %}

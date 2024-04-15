@@ -14,39 +14,38 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, RequestStack $requestStack): Response
     {
-        
+
         // Vérifiez si l'utilisateur est connecté
-          $user = $this->getUser();
-            if ($user instanceof User) {
+        $user = $this->getUser();
+        if ($user instanceof User) {
 
-                 // Vérifiez si l'utilisateur est un administrateur
-                 if ($user->isConnecAdministrateur()) { 
-                    $session = $requestStack->getSession();
-                    $session->set('adminconnect',1);    
-                    return $this->redirectToRoute('app_admin'); 
-                }
+            // Vérifiez si l'utilisateur est un administrateur
+            if ($user->isConnecAdministrateur()) {
+                $session = $requestStack->getSession();
+                $session->set('adminconnect', 1);
+                return $this->redirectToRoute('app_admin');
+            }
 
-                // Vérifiez si l'utilisateur est un consultant
-                if ($user->isConnecConsultant()) { 
-                    $session = $requestStack->getSession();
-                    $session->set('consultantconnect',2);
-                    return $this->redirectToRoute('app_consultant');
-                }
-                 // Vérifiez si l'utilisateur est un candidat
-                 if ($user->isConnecRecruteur()) { 
-                    $session = $requestStack->getSession();
-                    $session->set('recruteurconnect',3);
-                    return $this->redirectToRoute('app_compte_recruteur'); 
-                }
-               
-                 // Vérifiez si l'utilisateur est un candidat
-                 if ($user->isConnecCandidat()) { 
-                    $session = $requestStack->getSession();
-                    $session->set('candidatconnect',4);
-                    return $this->redirectToRoute('app_compte_candidat'); 
-                }
-                
-            }        
+            // Vérifiez si l'utilisateur est un consultant
+            if ($user->isConnecConsultant()) {
+                $session = $requestStack->getSession();
+                $session->set('consultantconnect', 2);
+                return $this->redirectToRoute('app_consultant');
+            }
+            // Vérifiez si l'utilisateur est un recruteur
+            if ($user->isConnecRecruteur()) {
+                $session = $requestStack->getSession();
+                $session->set('recruteurconnect', 3);
+                return $this->redirectToRoute('app_compte_recruteur');
+            }
+
+            // Vérifiez si l'utilisateur est un candidat
+            if ($user->isConnecCandidat()) {
+                $session = $requestStack->getSession();
+                $session->set('candidatconnect', 4);
+                return $this->redirectToRoute('app_compte_candidat');
+            }
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

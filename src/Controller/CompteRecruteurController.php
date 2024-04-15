@@ -10,17 +10,32 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CompteRecruteurController extends AbstractController
 {
     /////////////////////////////Page d'accueil du recruteur////////////////////////////////
     #[Route('/compte/recruteur', name: 'app_compte_recruteur')]
+    #[IsGranted('ROLE_RECRUTEUR')]
     public function index(): Response
     {
-        return $this->render('compte_recruteur/index.html.twig', [
-            'controller_name' => 'CompteRecruteurController',
-        ]);
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
+            // Vérifiez si l'utilisateur est un recruteur
+            if ($user->getRecruteur()->isApprobationConsultant  ()) {
+                // Vérification de l'approbation du consultant
+                return $this->render('compte_recruteur/index.html.twig');
+               } else {
+                // Gérer le cas où l'approbation du consultant est refusée
+                $this->addFlash('error', 'Votre demande d\'approbation est en cours de traitement.');
+                //return $this->deconnexionEtHomepage();
+                return $this->redirectToRoute('app_home');
+               }
+            }
+
+        return $this->render('compte_recruteur/index.html.twig');
     }
 
     ////////////////////////Ajouter une annonce du recruteur//////////////////////////////
@@ -66,7 +81,7 @@ class CompteRecruteurController extends AbstractController
             $entityManager->persist($annonce);
             $entityManager->flush();
             // Affiche un message de succès à l'utilisateur
-            $this->addFlash('success', 'L\'annonce a été ajoutée avec succès.');
+            $this->addFlash('success', 'L\'annonce a été ajoutée avec succès. En attente de l\'accord du consultant');
         }
 
         // Redirige l'utilisateur vers la page d'ajout d'annonces
@@ -115,7 +130,7 @@ class CompteRecruteurController extends AbstractController
             $entityManager->flush();
 
             // Affiche un message de succès à l'utilisateur
-            $this->addFlash('succes', 'Les coordonnées ont été mis à jour.');
+            $this->addFlash('success', 'Les coordonnées ont été mis à jour.');
         }
 
         // Redirige l'utilisateur vers la page d'ajout d'annonces

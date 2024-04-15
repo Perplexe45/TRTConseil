@@ -13,14 +13,17 @@
 			{{ app.user.candidat.prenom }}</span>
 	</h1>
 
-	<div class="container">
-		{% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-    {% endfor %}
+	{# Message pour informer que le client a publié. #}
+	<div class="container" id="flash-messages">
+		<div class="messages-container">
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+			{% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-    {% endfor %}
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success centered" role="alert">{{ message }}</div>
+			{% endfor %}
+		</div>
 	</div>
 
 
@@ -83,8 +86,8 @@
 								</div>
 								<div class="card-body">
 									<div class="table-responsive bg-light">
-										<table class="table-bordered table-striped table-hover">
-											<thead>
+										<table class="table-striped table-hover table-bordered table-border">
+											<thead class="colorThead text-center">
 												<tr class="text-center">
 													<th>ID</th>
 													<th>Date</th>
@@ -98,27 +101,27 @@
 											</thead>
 											<tbody>
 												{% for candidatAnnonce in app.user.candidat.candidatAnnonces %}
-														{% if candidatAnnonce.annonce %}
-																<tr class="text-center">
-																		<td>{{ candidatAnnonce.annonce.id }}</td>
-																		<td>{{ candidatAnnonce.annonce.dateCreation|date('Y-m-d') }}</td>
-																		<td>{{ candidatAnnonce.annonce.recruteur.nomEntreprise }}</td>
-																		<td>{{ candidatAnnonce.annonce.poste }}</td>
-																		<td>{{ candidatAnnonce.annonce.lieu }}</td>
-																		<td>{{ candidatAnnonce.annonce.salaire }}</td>
-																		<td>{{ candidatAnnonce.annonce.description }}</td>
-																		<td>
-																				<div class="position-relative p-1">
-																						<form action="{{ path('supprimer_candidature', {'id': candidatAnnonce.id}) }}" method="post" class="delete-form">
-																								<input type="hidden" name="_method" value="DELETE">
-																								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ candidatAnnonce.id) }}">
-																								<button type="submit" class="btn-primary rounded text-nowrap">Supprimer</button>
-																						</form>
-																				</div>
-																		</td>
-																</tr>
-																
-														{% endif %}
+													{% if candidatAnnonce.annonce %}
+														<tr class="text-center">
+															<td>{{ candidatAnnonce.annonce.id }}</td>
+															<td>{{ candidatAnnonce.annonce.dateCreation|date('Y-m-d') }}</td>
+															<td>{{ candidatAnnonce.annonce.recruteur.nomEntreprise }}</td>
+															<td>{{ candidatAnnonce.annonce.poste }}</td>
+															<td>{{ candidatAnnonce.annonce.lieu }}</td>
+															<td>{{ candidatAnnonce.annonce.salaire }}</td>
+															<td>{{ candidatAnnonce.annonce.description }}</td>
+															<td>
+																<div class="position-relative p-1">
+																	<form action="{{ path('supprimer_candidature', {'id': candidatAnnonce.id}) }}" method="post" class="delete-form">
+																		<input type="hidden" name="_method" value="DELETE">
+																		<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ candidatAnnonce.id) }}">
+																		<button type="submit" class="btn-primary rounded text-nowrap">Supprimer</button>
+																	</form>
+																</div>
+															</td>
+														</tr>
+
+													{% endif %}
 												{% endfor %}
 											</tbody>
 										</table>
@@ -174,7 +177,7 @@
 														<div class="col-lg-3 col-md-3 bg-light"></div>
 														<div class="form-group col-lg-6 col-md-6">
 															<label>Modifier le mot de passe</label>
-															<input class="form-control inputCustom" name="modifpassword" type="password">
+															<input class="form-control inputCustom" name="modifpassword" type="password" value="">
 														</div>
 														<div class="col-lg-3 col-md-3 bg-light"></div>
 													</div>
@@ -248,7 +251,7 @@ var fileName = this.files[0].name;
 cvDisplayInput.value = fileName;
 });
 
-// Suppression de l'erreur si c pas un fichier pdf
+//Diparition du message après 3 secondes
 document.addEventListener('DOMContentLoaded', function () {
 var alerts = document.querySelectorAll('.alert');
 

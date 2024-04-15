@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
-{% block stylesheets %} {% endblock %}
+{% block title %}Accueil
+{% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
 	<section data-bs-version="5.1" class="header14 cid-sFzxmVl7J6" id="header14-1f">
@@ -17,9 +18,9 @@
 						</h1>
 						<p class="mbr-text mbr-fonts-style display-7">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut
-																						dapibus massa, efficitur varius augue. In vel elit lorem. Fusce
-																						et dui fringilla, suscipit nulla viverra nunc. Nulla ut justo
-																						enim vehicula maximus.
+														dapibus massa, efficitur varius augue. In vel elit lorem. Fusce
+														et dui fringilla, suscipit nulla viverra nunc. Nulla ut justo
+														enim vehicula maximus.
 						</p>
 					</div>
 				</div>
@@ -28,13 +29,15 @@
 	</section>
 
 	<div class="container" id="flash-messages">
-        {% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-    {% endfor %}
+		<div class="messages-container">
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+			{% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-    {% endfor %}
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success centered" role="alert">{{ message }}</div>
+			{% endfor %}
+		</div>
 	</div>
 
 	<section data-bs-version="5.1" class="header14" id="header14-1j">
@@ -50,14 +53,14 @@
 						</h1>
 						<p class="mbr-text mbr-fonts-style display-7">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut
-																						dapibus massa, efficitur varius augue. In vel elit lorem. Fusce
-																						et dui fringilla, suscipit nulla sed, viverra nunc. Nulla ut
-																						justo ut enim vehicula maximus. Nam et neque tempus.<br/><br/>Duis
-																						lobortis aliquam varius. Aliquam at metus at urna bibendum
-																						aliquet. Curabitur ut commodo ex, nec vehicula eros. Suspendisse
-																						dictum eu tortor id aliquam. Pellentesque habitant morbi
-																						tristique senectus et netus et malesuada fames ac turpis
-																						egestas.<br/>
+																													dapibus massa, efficitur varius augue. In vel elit lorem. Fusce
+																													et dui fringilla, suscipit nulla sed, viverra nunc. Nulla ut
+																													justo ut enim vehicula maximus. Nam et neque tempus.<br/><br/>Duis
+																													lobortis aliquam varius. Aliquam at metus at urna bibendum
+																													aliquet. Curabitur ut commodo ex, nec vehicula eros. Suspendisse
+																													dictum eu tortor id aliquam. Pellentesque habitant morbi
+																													tristique senectus et netus et malesuada fames ac turpis
+																													egestas.<br/>
 						</p>
 						<div class="mbr-section-btn mt-3">
 							<a class="btn btn-primary display-4" href="https://mobiri.se">Read More</a>
@@ -88,7 +91,7 @@
 
 							<p class="mbr-text mbr-fonts-style mt-3 display-7">
 								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-																									ut dapibus massa varius augue. In vel elit lorem.
+																																	ut dapibus massa varius augue. In vel elit lorem.
 							</p>
 						</div>
 					</div>
@@ -105,7 +108,7 @@
 
 							<p class="mbr-text mbr-fonts-style mt-3 display-7">
 								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-																									ut dapibus massa varius augue. In vel elit lorem.
+																																	ut dapibus massa varius augue. In vel elit lorem.
 							</p>
 						</div>
 					</div>
@@ -122,7 +125,7 @@
 
 							<p class="mbr-text mbr-fonts-style mt-3 display-7">
 								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-																									ut dapibus massa varius augue. In vel elit lorem.<br/>
+																																	ut dapibus massa varius augue. In vel elit lorem.<br/>
 							</p>
 						</div>
 					</div>
@@ -243,11 +246,11 @@
 					</h2>
 					<p class="mbr-text mbr-fonts-style display-7">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut
-																			dapibus massa, efficitur varius augue. In vel elit lorem. Fusce et
-																			dui fringilla, suscipit nulla sed, viverra nunc. Nulla ut justo ut
-																			enim vehicula maximus. Nam et neque tempus, ultricies purus vel,
-																			suscipit leo. Praesent orci turpis, maximus facilisis rhoncus vel,
-																			consequat ac augue. Nam facilisis mi non elit tempor sodales.<br/>
+																									dapibus massa, efficitur varius augue. In vel elit lorem. Fusce et
+																									dui fringilla, suscipit nulla sed, viverra nunc. Nulla ut justo ut
+																									enim vehicula maximus. Nam et neque tempus, ultricies purus vel,
+																									suscipit leo. Praesent orci turpis, maximus facilisis rhoncus vel,
+																									consequat ac augue. Nam facilisis mi non elit tempor sodales.<br/>
 					</p>
 				</div>
 				<div class="icons d-flex align-items-center col-12 col-md-6 justify-content-end mt-md-0 mt-2 flex-wrap">
@@ -281,15 +284,6 @@
 			<div class="row justify-content-center mt-4">
 				<div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
 					<form action="" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name">
-						<input type="hidden" name="email" data-form-email="true" value="NzaPLF811zuV2dkMMXuMjZd23AW1K4qhO/sSlvda1kVqn+zot7SVzXE1dOzd6bNO5NVDwv2C/q6lIZWD6H2CicqI2Yr8mDcfMWZiFyVIwvQORmj5FmlnsGcUPnBiL7vk"/>
-						<div class="row">
-							<div hidden="hidden" data-form-alert="" class="alert alert-success col-12">
-								Notre équipe va vous répondre très prochaine.
-							</div>
-							<div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
-								Oops...! some problem!
-							</div>
-						</div>
 						<div class="dragArea row">
 							<div class="col-md col-sm-12 form-group mb-3" data-for="name">
 								<input type="text" name="name" placeholder="Nom" data-form-field="name" class="form-control" value="" id="name-form5-1m"/>
@@ -333,14 +327,14 @@
 	<input name="animation" type="hidden"/>
 
 	<section class="display-7" style="
-								padding: 0;
-								align-items: center;
-								justify-content: center;
-								flex-wrap: wrap;
-								align-content: center;
-								display: flex;
-								position: relative;
-							"></section>
+										padding: 0;
+										align-items: center;
+										justify-content: center;
+										flex-wrap: wrap;
+										align-content: center;
+										display: flex;
+										position: relative;
+									"></section>
 	<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="assets/smoothscroll/smooth-scroll.js"></script>
 	<script src="assets/ytplayer/index.js"></script>
@@ -349,19 +343,40 @@
 	<script src="assets/theme/js/script.js"></script>
 	<script src="assets/formoid/formoid.min.js"></script>
 
-	{# //Messages pour que la durée ne soit que de 4 secondes #}
-{# 	<script type="text/javascript">
-  window.onload = function() {
-    setTimeout(function() {
-      var flashMessages = document.querySelectorAll("#flash-messages .alert");
-      flashMessages.forEach(function(el) {
-        el.parentNode.removeChild(el);
-      });
-    }, 4000); // 4 seconds
-  };
-</script> #}
+	{# //Messages pour que la durée ne soit que de 3 secondes #}
+	<script type="text/javascript">
+		// Diparition du message après 3 secondes
+document.addEventListener('DOMContentLoaded', function () {
+var alerts = document.querySelectorAll('.alert');
+
+// Parcourir tous les messages d'alerte
+for (var i = 0; i < alerts.length; i++) {
+var alert = alerts[i];
+
+// Créer une animation pour faire disparaître le message d'alerte
+var fadeOut = new KeyframeEffect(alert, [
+{
+opacity: 1
+}, {
+opacity: 0
+}
+], {
+duration: 300,
+iterations: 1,
+fill: 'forwards'
+});
+
+var animation = new Animation(fadeOut, document.timeline);
+
+// Démarrer l'animation après un délai
+setTimeout(function () {
+animation.play();
+}, 3000); // 3 secondes
+}
+});
+	</script>
 
 
 {% endblock %}
 
-{% block javascripts %}	{% endblock %}
+{% block javascripts %}{% endblock %}
