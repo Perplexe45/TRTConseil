@@ -20,7 +20,6 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-
         $user = new User();
         $candidat = null;
         $recruteur = null;
@@ -43,6 +42,7 @@ class RegistrationController extends AbstractController
                 // Récupére le nom du candidat à partir du formulaire imbriqué
                 $nom = $form->get('candidat')->get('nom')->getData();
                 $candidat->setNom($nom);
+                $candidat->setApprobationConsultant(0);
 
                 // Associe le métier au candidat
                 $metier = $form->get('metier')->getData();
@@ -59,6 +59,7 @@ class RegistrationController extends AbstractController
                 $recruteur = new Recruteur();
                 $nomEntreprise = $form->get('recruteur')->get('nomEntreprise')->getData();
                 $recruteur->setNomEntreprise($nomEntreprise);
+                $recruteur->setApprobationConsultant(0);
                 // Associe l'utilisateur au recruteur
                 $user->setRecruteur($recruteur); //Recup l'ID du recruteur pour le User
                 $user->setCandidat(NULL);
@@ -67,13 +68,14 @@ class RegistrationController extends AbstractController
                 $user->setMetier(NULL);
             }
 
-
             $user->setRoles($roles);
             $user->setEnService(0);
 
+           // Récupère le mot de passe en clair à partir du formulaire
+            $plainPassword = $form->get('plainPassword')->getData();
 
-            // Encode le mot de passe
-            $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            // Définit le mot de passe crypté avec méthode setPassword() de l'entité User
+            $user->setPassword($plainPassword);
 
             // Persiste et flush l'objet Recruteur ou candidat
             if ($categorie === 'Candidat') {
@@ -81,7 +83,6 @@ class RegistrationController extends AbstractController
             } elseif ($categorie === 'Recruteur') {
                 $entityManager->persist($recruteur);
             }
-
 
             //Début de l'enregistrement dans la table User
             $entityManager->persist($user);

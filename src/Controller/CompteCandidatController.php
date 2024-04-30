@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\User;
 use App\Entity\Metier;
 use App\Entity\CandidatAnnonce;
@@ -15,16 +16,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class CompteCandidatController extends AbstractController
 {
 
     private $doctrine;
-    public function __construct(ManagerRegistry $doctrine)
+    private $tokenStorage;
+
+    public function __construct(ManagerRegistry $doctrine, TokenStorageInterface $tokenStorage)
     {
         $this->doctrine = $doctrine;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /////////////////////////Page d'accueil/////////////////////////////
@@ -32,23 +36,23 @@ class CompteCandidatController extends AbstractController
     #[IsGranted('ROLE_CANDIDAT')]
     public function index(RequestStack $requestStack, EntityManagerInterface $entityManager): Response
     {
-     // Vérifiez si l'utilisateur est connecté
-     $user = $this->getUser();
+        // Vérifiez si l'utilisateur est connecté
+        $user = $this->getUser();
 
-     if ($user instanceof User) {
-         // Vérifiez si l'utilisateur est un candidat
-         if ($user->getCandidat()->isApprobationConsultant  ()) {
-             // Vérification de l'approbation du consultant
-             return $this->render('compte_candidat/index.html.twig', [
-                 'controller_name' => 'CompteCandidatController',
-             ]);
+        if ($user instanceof User) {
+            // Vérifiez si l'utilisateur est un candidat
+            if ($user->getCandidat()->isApprobationConsultant()) {
+                // Vérification de l'approbation du consultant
+                return $this->render('compte_candidat/index.html.twig', [
+                    'controller_name' => 'CompteCandidatController',
+                ]);
             } else {
-             // Gérer le cas où l'approbation du consultant est refusée
-             $this->addFlash('error', 'Votre demande d\'approbation est en cours de traitement.');
-             //return $this->deconnexionEtHomepage();
-             return $this->redirectToRoute('app_home');
+                // Gérer le cas où l'approbation du consultant est refusée
+                $this->addFlash('error', 'Votre demande d\'approbation est en cours de traitement.');
+                //return $this->deconnexionEtHomepage();
+                return $this->redirectToRoute('app_home');
             }
-         }
+        }
 
         return $this->render('compte_candidat/index.html.twig', [
             'controller_name' => 'CompteCandidatController',
@@ -88,7 +92,7 @@ class CompteCandidatController extends AbstractController
             if (!empty($cvFile)) {
                 if ($cvFile instanceof UploadedFile && $cvFile->guessExtension() === 'pdf') {
                     $fileName = $cvFile->getClientOriginalName();
-    
+
                     // Déplace le fichier téléversé vers le répertoire de destination
                     $cvFile->move($this->getParameter('cv_directory'), $fileName);
                     $candidat->setCv($fileName);
@@ -97,7 +101,7 @@ class CompteCandidatController extends AbstractController
                     $this->addFlash('error', 'Le fichier doit être un fichier PDF.');
                 }
             }
-            
+
             ///////Récupération des champs de Twig///////////////////
             $nom = $request->request->get('nom');
             $prenom = $request->request->get('prenom');
@@ -105,23 +109,21 @@ class CompteCandidatController extends AbstractController
             $motdepasseModif = $request->get('modifpassword');
             $confirmpassword = $request->get('confirmpassword');
 
-            
+
             /////////////////////////Modif du mot de passe///////////////////////////
             if (!empty($motdepasseModif) && !empty($confirmpassword)) {
                 // Modif du mot de passe si les 2 champs ont été remplis
                 if ($motdepasseModif === $confirmpassword) {
                     // Mettre à jour le mot de passe de l'utilisateur existant
                     if ($user instanceof User) {
-                        // Encode le mot de passe avec Bcrypt et un coût de 13
-                        $encodedPassword = password_hash($motdepasseModif, PASSWORD_BCRYPT, ['cost' => 13]);
-                        $user->setPassword($encodedPassword);
+                        $user->setPassword($confirmpassword);
                     }
                 } else {
                     // Les mots de passe ne correspondent pas.
                     throw $this->createAccessDeniedException('Les mots de passe ne sont pas identiques.');
                 }
             }
-            
+
             // MAJ des coordonnées
             $candidat->setNom($nom);
             $candidat->setPrenom($prenom);
@@ -140,8 +142,8 @@ class CompteCandidatController extends AbstractController
         ]);
     }
 
-    ///////////////////////Supprimer une annonce///////////////////////////
-    #[Route('/compte/candidat/supprimer/{id}', name: 'supprimer_candidature', methods: ['POST', 'DELETE'])]
+    ///////////////////////Supprimer une annonce du candidat///////////////////////////
+    #[Route('/compte/candidat/supprimer_annonce/{id}', name: 'supprimer_candidature', methods: ['POST', 'DELETE'])]
     public function supprimerCandidature(Request $request, CandidatAnnonce $candidatAnnonce): Response
     {
         $entityManager = $this->doctrine->getManager();
@@ -151,5 +153,38 @@ class CompteCandidatController extends AbstractController
         $this->addFlash('success', 'La candidature a été supprimée avec succès.');
 
         return $this->redirectToRoute('app_compte_candidat');
+    }
+
+    ///////////////////////Supprimer le compte du candidat///////////////////////////
+    #[Route('/compte/candidat/supprimer_compte', name: 'supprimer_compte', methods: ['POST', 'DELETE'])]
+    public function supprimerCompte(EntityManagerInterface $entityManager): Response
+    {
+        
+        // Récup l'utilisateur connecté
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('Utilisateur introuvable');
+        }
+    
+        // Suppression des id de la table annonce_candidat
+    $queryBuilder = $entityManager->createQueryBuilder();
+    $queryBuilder
+        ->delete(CandidatAnnonce::class, 'ac')
+        ->where('ac.candidat = :candidat')
+        ->setParameter('candidat', $user->getCandidat());
+        $queryBuilder->getQuery()->execute();
+
+    // Suppression de l'id de la table candidat
+    $entityManager->remove($user->getCandidat());
+
+    // Suppression de l'id de la table user
+    $entityManager->remove($user);
+
+    // Enregistrement en base de données
+    $entityManager->flush();
+    $this->addFlash('success', 'La compte a été supprimé avec succès.'); 
+    return $this->redirectToRoute('app_logout');
+    //return $this->redirectToRoute('app_home');
+    
     }
 }

@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Repository\AnnonceRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 class AnnonceController extends AbstractController
@@ -37,6 +39,7 @@ class AnnonceController extends AbstractController
             ->andWhere('r.approbationConsultant = :approuve')
             ->setParameter('publie', true)
             ->setParameter('approuve', true)
+            ->orderBy('a.id', 'DESC')
             ->getQuery()
             ->getResult();
 
@@ -44,6 +47,7 @@ class AnnonceController extends AbstractController
             'annonces' => $annonces,
         ]);
     }
+    
 
     /////////////////////////////////////////////////
     ///////////Ajouter une annonce//////////////////
@@ -57,6 +61,7 @@ class AnnonceController extends AbstractController
         );
     }
 
+
     ////////////////////////////////////////////////////////////////////////
     ////////////////postuler a une annonce par un candidat/////////////////
     #[Route('/annonces/candidat/{annonce}/{candidat}', name: 'app_postuler')]
@@ -64,8 +69,6 @@ class AnnonceController extends AbstractController
     {
         // Récupére l'utilisateur connecté
         $candidatUser = $this->getUser();
-        
-
 
         //// Vérifie si l'utilisateur est connecté et est candidat
         if ($candidatUser instanceof User && in_array('ROLE_CANDIDAT', $candidatUser->getRoles())) {
@@ -73,14 +76,18 @@ class AnnonceController extends AbstractController
             $cv = $candidatUser->getCandidat()->getCv();
             $candidatApprouve = $candidatUser->getCandidat()->isApprobationConsultant();
             $candidatAvecCV = $candidatUser->getCandidat()->getCv();
-            
-        } 
+           } 
+
+        if ($candidatApprouve === false) {
+            $this->addFlash('error', 'Vous n\'avez pas encore l\'autorisation !   ');
+            return $this->redirectToRoute('app_home');
+        }
+
         if ($candidatAvecCV === NULL) {
             $this->addFlash('error', 'Vous n\'avez pas laissé de CV au recruteur');
             return $this->redirectToRoute('app_home');
         }
         
-      
         if (!$candidatApprouve) {
             // Redirige l'utilisateur vers la page de connexion
             return $this->redirectToRoute('app_login');
@@ -92,7 +99,6 @@ class AnnonceController extends AbstractController
             if ($candidatAvecCV == "" )  {
                 return $this->redirectToRoute('app_login');
             }
-            dd($candidatAvecCV);
 
             // Récupére l'ID de l'annonce de la requête
             $annonceId = $request->query->get('annonce');
@@ -109,7 +115,6 @@ class AnnonceController extends AbstractController
             $request->getSession()->set('annonceId', $annonce->getId());
             return $this->redirectToRoute('app_login');
         }
-
 
         // Créer une nouvelle instance de CandidatAnnonce
         $candidatAnnonce = new CandidatAnnonce();
@@ -139,7 +144,7 @@ class AnnonceController extends AbstractController
         $id = intval($id);
 
         // Récupérer l'annonce à partir de l'identifiant du param de la route
-        $annonce = $annonceRepository->find($id);
+        $annonce = $annonceRepository->find ($id);
         /* dd($annonce); */
 
         // Vérifier si l'annonce existe
@@ -147,22 +152,56 @@ class AnnonceController extends AbstractController
             throw $this->createNotFoundException('L\'annonce demandée n\'existe pas.');
         }
 
-
         // Rediriger vers la page de réponses de l'annonce
         return $this->render('reponsesAnnonces/index.html.twig', [
             'annonce' => $annonce,
         ]);
     }
 
-    ////////////////////////////////////////////////////////////////////////
-    //////////////////////Supprimer une annonce////////////////////////////
-    #[Route('/annonces/supprimer/id', name: 'app_supprimerAnnonce')]
-    public function SupprimerAnnonce(Annonce $annonce, Candidat $candidat, EntityManagerInterface $entityManager, RequestStack $requestStack, Request $request): Response
-    {
-        // Récupérer l'utilisateur connecté
-        $candidatUser = $this->getUser();
 
-        // Rediriger l'utilisateur vers une page de confirmation ou une autre page
-        return $this->redirectToRoute('app-listAnnonces');
+    ////////////////////////////////////////////////////////////////////////
+    //////////////////////Supprimer une annonce du recruteur////////////////////////////
+    #[Route('/annonces/supprimer/{id}', name: 'app_supprimerAnnonce', methods: ['POST', 'DELETE'])]
+    public function SupprimerAnnonce(int $id, Annonce $annonce, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Vérifier si l'ID est correct
+        //dd("ID dans le contrôleur: " . $id);
+
+        // Récupérer toutes les entités liées
+        $candidatAnnonces = $entityManager->getRepository(CandidatAnnonce::class)->findBy(['annonce' => $annonce]);
+        
+        // Supprime les entités liées dans candidatsAnnonces
+        foreach ($candidatAnnonces as $candidatAnnonce) {
+          $entityManager->remove($candidatAnnonce);
+        }
+
+        // Supprimer l'annonce
+        $entityManager->remove($annonce);
+        $entityManager->flush();
+
+        //Message indiquant que l'enregistrement a bien eu lieu
+        $this->addFlash('success', 'Cette annonce a été supprimée avec tous les candidats qui ont postulés.');
+
+        // Redirige sur la même page et raffraichissement.
+        return $this->redirect($request->headers->get('referer'));
     }
+
+
+    ////////////////////////////////////////////////////////////////////////
+    //////////////////////Télécharger le CV d'un candidat////////////////////////////
+    #[Route('/annonces/download_cv', name: 'app_download_cv', methods: ['POST', 'DELETE'])]
+    public function downloadCV($filename)
+    {
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $filename;
+
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('Le fichier demandé n\'existe pas.');
+        }
+
+        $response = new BinaryFileResponse($filePath);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+        return $response;
+    }
+
 }

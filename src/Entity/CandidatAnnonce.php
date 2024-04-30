@@ -21,11 +21,11 @@ class CandidatAnnonce
     #[ORM\JoinColumn(nullable: false)]
     private ?Candidat $candidat = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $approbationConsultant = null;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
+    private bool $approbationConsultant = false;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $envoiMailRecruteur = null;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
+    private bool $envoiMailRecruteur = false;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;

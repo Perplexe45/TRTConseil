@@ -26,13 +26,14 @@
 
 	<div class="">
 		<div class=" ">
-			<div class="section">
+			<div
+				class="section">
 
 				{# Message pour confirmation du candidat qui a postulé #}
 				<div class="container" id="flash-messages">
 					<div class="messages-container">
 						{% for message in app.flashes('error') %}
-							<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+							<div class="alert flashError centered" role="alert">{{ message }}</div>
 						{% endfor %}
 
 						{% for message in app.flashes('success') %}
@@ -40,11 +41,12 @@
 						{% endfor %}
 					</div>
 				</div>
-					
+
 
 				<div class="container">
 					<div class="row">
-						<div class="col-lg-2 col-md-2">
+						<div
+							class="col-lg-2 col-md-2">
 							{# Navbar #}
 							<div class="dashboard_menu bg-light	 rounded-2">
 								<ul class="nav flex-column" role="tablist">
@@ -83,12 +85,15 @@
 										<div class="card-header bg-light ">
 											<h3 class="text-center">Gestion des recrutements</h3>
 										</div>
-										<div class="card-body">
-											<p class="fs-5">
-												La gestion des recruteurs consiste à gérer et optimiser les processus de recherche, d'évaluation et d'intégration de candidats au sein d'une entreprise.
-												<br><br>
-												C'est donc dans ce back-office que s'effectue la gestion pour trouver les candidats correspondants.
-											</p>
+										<div class="card-body bg-light">
+											<div class="d-flex align-item-center justify-content-center">
+												<p class="fs-5">
+													La gestion des recruteurs consiste à gérer et optimiser les processus de recherche, d'évaluation et d'intégration de candidats au sein d'une entreprise.
+													<br><br>
+													C'est donc ce back-office que s'effectue la gestion pour trouver les candidats correspondants.
+												</p>
+											</div>
+
 										</div>
 									</div>
 								</div>
@@ -128,18 +133,19 @@
 																			<td>{{ annonce.description }}</td>
 																			<td>
 																				<div class="position-relative p-1">
-																					<form action="{{ path('app_reponseCandidat', {'id': annonce.id}) }}" method="post" class="delete-form">
-																						<button type="submit" class="btn-primary rounded text-nowrap">candidats</button>
+																					<form action="{{ path('app_reponseCandidat', {'id': annonce.id}) }}" method="post" class="delete-post">
+																						<button type="submit" class="btn-blue rounded text-nowrap">candidats</button>
 																					</form>
 																				</div>
 																			</td>
 
 																			<td>
 																				<div class="position-relative p-1">
-																					<form action="{{ path('app_supprimerAnnonce', {'id': annonce.id}) }}" method="post" class="delete-form">
-																						<button type="submit" class="btn-primary rounded text-nowrap">Supprimer</button>
+																					<form
+																						action="{{ path('app_supprimerAnnonce', {'id': annonce.id}) }}" method="post" class="delete-jobListing">
+																						{# {{ dump(annonce) }} #}
+																						<button type="submit" class="rounded text-nowrap btn-red">Supprimer</button>
 																					</form>
-
 																				</div>
 																			</td>
 																		{% endif %}
@@ -220,23 +226,25 @@
 												<div class="card mb-3 mb-lg-0">
 													<div class="card-header bg-light">
 														<h3 class="text-center">Coordonnée enregistrée</h3>
-													</div>
-
-													<div class="card-header bg-light">
-
-														<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
+													</div
+													<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
 														{# <div >{{dump(app.user.recruteur.id)}}</div> #}
-														<p class="text-center fs-5">
+
+													<div class="card-header bg-light">	
+														<div class="border border-solid border-width border-primary my-5 rounded-3 bg-warning">
+															<p class="text-center fs-5 pt-4">
 															Nom de la société :
-															<span class="fs-2 ps-2 pe-2 bg-warning">{{ app.user.recruteur.nomEntreprise }}</span>
-														</p>
-														<address class="fs-5 text-center">Adresse :
+															<span class="fs-2 ps-2 pe-2 bg-warning">{{ app.user.recruteur.nomEntreprise }}</span></p>
+															
+															<address class="fs-5 text-center">Adresse :
 															{{ app.user.recruteur.adresse }}<br>Code postal :
 															{{ app.user.recruteur.codepostal }}<br>Ville :
 															{{ app.user.recruteur.ville}}
 															<br><br>
 
 															<p class="fs-5">Pays : France</p>
+														</div>
+														
 
 														</div>
 													</div>
@@ -271,6 +279,11 @@
 																		<input required="" class="form-control inputCustom" name="ville" value="{{ app.user.recruteur.ville }}">
 																	</div>
 																	<div class="form-group col-md-12 mb-2">
+																		<label>Email</label>
+																		<input required="" class="form-control inputCustom" name="email" value="{{ app.user.recruteur.email }}">
+																	</div>
+
+																	<div class="form-group col-md-12 mb-2">
 																		<label>Site internet</label>
 																		<input class="form-control inputCustom" name="siteinternet" value="{{ app.user.recruteur.siteinternet }}">
 																	</div>
@@ -293,35 +306,34 @@
 												</div>
 												<div class="card-header bg-light">
 
-													<form method="post" name="enq">
+													<form method="POST" action="{{ path('modif_compte') }}" class="bg-light">
 														<div class="row">
 															<div class="form-group col-md-3 mb-2">
+																<input type="hidden" name="recruteur_id" value="{{ app.user.recruteur.id }}">
 																<label>Nom de l'entreprise</label>
 																{% if app.user.recruteur is defined and app.user.recruteur is not null %}
-																	<input class="form-control inputCustom" name="nom" type="text" value="{{ app.user.recruteur.nomEntreprise }}">
+																	<input class="form-control inputCustom" name="nom" type="text" value="{{ app.user.recruteur.nomEntreprise }}" readonly>
 																{% else %}
 																	<input class="form-control inputCustom" name="nom" type="text" value="">
 																{% endif %}
 															</div>
 															<div class="form-group col-md-4 mb-2">
 																<label>Address email</label>
-																<input class="form-control inputCustom" name="email" type="email" value="{{ app.user.email }}">
+																<input class="form-control inputCustom" name="email" type="email" value="{{ app.user.email }}" readonly>
 															</div>
 															<div class="form-group col-md-5 mb-2">
 																<label>Mot de passe actuel
 																	<span class="required">*</span>
 																</label>
-																<input class="form-control inputCustom" name="password" type="password" value="{{ app.user.password }}">
+																<input class="form-control inputCustom" name="password" type="password" value="{{ app.user.password }}" readonly>
 															</div>
 														</div>
 
 														<div class="row">
 															<div class="form-group col-md-3 mb-2"></div>
 															<div class="form-group col-md-6 mb-2">
-																<label>Nouveau mot de passe
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control inputCustom" name="npassword" type="password">
+																<label>Nouveau mot de passe</label>
+																<input class="form-control inputCustom" name="npassword" type="password">
 															</div>
 															<div class="form-group col-md-3 mb-2"></div>
 														</div>
@@ -329,10 +341,8 @@
 														<div class="row">
 															<div class="form-group col-md-3 mb-2"></div>
 															<div class="form-group col-md-6 mb-2">
-																<label>Confirmer le mot de passe
-																	<span class="required">*</span>
-																</label>
-																<input required="" class="form-control inputCustom" name="cpassword" type="password">
+																<label>Confirmer le mot de passe</label>
+																<input class="form-control inputCustom" name="cpassword" type="password">
 																<div class="form-group col-md-3 mb-2"></div>
 															</div>
 														</div>
@@ -357,16 +367,23 @@
 												<div class="card-header bg-light">
 													<h3 class="text-center">Suppression du compte</h3>
 												</div>
-												<div class="card-header bg-light ">
-													<p class="text-center pt-4">Vous avez la possibilité de supprimer votre compte, si vous le souhaitez
-													</p>
-													<div class="mt-4 mb-2">
+												<div class="bg-light ">
+													<p class="text-center">Vous avez la possibilité de supprimer votre compte, si vous le souhaitez.<br></p>
+														<p class="text-center">Vous n'aurez plus d'information concernant vos démarches.<hr>
+														<div class="text-center display-4">
+															<span class="fw-bold"> Réfléchissez donc bien </span>  avant de supprimer vos annonces.</p>
+														</div>
+														<div class="mt-4 mb-2">
 														<div class="row">
-															<div class="form-group col-md-3 mb-2"></div>
-															<div class="form-group col-md-6 mb-2">
-																<button type="submit" class="btn btn-primary py-2 my-2 btnWidth" name="submit" value="Submit">Suppression</button>
+															<div class="form-group col-lg-4 col-md-3 mb-2"></div>
+															<div class="form-group col-lg-4 col-md-6 mb-2">
+																<form action="{{ path('supprimer_recruteur')}}" method="post" class="delete-count">
+																	<input type="hidden" name="_method" value="DELETE">
+																	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.recruteur.id) }}">
+																	<button type="submit" class="btn btn-red rounded btnWidth">Supprimer le compte</sp></button>
+																</form>
 															</div>
-															<div class="form-group col-md-3 mb-2"></div>
+															<div class="form-group col-lg-4 col-md-3 mb-2"></div>
 
 														</div>
 
@@ -386,17 +403,33 @@
 				</div>
 			</div>
 
+	{# ///////////////////////////////////////////////////////// #}
+	{# Boite de dialogue pour supprimer le compte recruteur #}
+	<div id="overlay"></div>
+<div class="row">
+    <div class="col-lg-5 col-md-4"></div>
+    <div class="col-lg-2 col-md-4">
+        <div id="dialogueBox">
+            <p>Voulez-vous vraiment supprimer votre compte ?</p>
+            <div id="buttonsDiv">
+                <button class="btn w-auto btn-blue me-auto" onclick="cancelDeleteAccount()">Annuler</button>
+                <button class="btn w-auto btn-red ms-auto" onclick="validateDeleteAccount()">Ok</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-4"></div>
+</div>
 
-	{# //Messages pour que la durée ne soit que de 3 secondes #}
-	<script type="text/javascript">
-		// Diparition du message après 3 secondes
+
+<script type="text/javascript">
+
+// //////////////////////////////////////////////////////////
+{# // Messages pour que la durée ne soit que de 3 secondes #}
 document.addEventListener('DOMContentLoaded', function () {
 var alerts = document.querySelectorAll('.alert');
-
 // Parcourir tous les messages d'alerte
 for (var i = 0; i < alerts.length; i++) {
 var alert = alerts[i];
-
 // Créer une animation pour faire disparaître le message d'alerte
 var fadeOut = new KeyframeEffect(alert, [
 {
@@ -409,17 +442,61 @@ duration: 300,
 iterations: 1,
 fill: 'forwards'
 });
-
 var animation = new Animation(fadeOut, document.timeline);
-
 // Démarrer l'animation après un délai
 setTimeout(function () {
 animation.play();
 }, 3000); // 3 secondes
 }
 });
-	</script>
 
-		{% endblock %}
+// ///////////////////////////////////////////////////////////////////////
+// /////////////////Supprimer une annonce du recruteur////////////////////
+document.querySelectorAll('.delete-jobListing').forEach(function (form) {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const overlay = document.getElementById('overlay');
+overlay.style.display = 'block';
+const dialogueBox = document.getElementById('dialogueBox');
+dialogueBox.style.display = 'block';
+dialogueBox.getElementsByTagName('p')[0].innerText = 'Êtes-vous sûr de supprimer cette annonce ?';
+dialogueBox.getElementsByTagName('button')[1].addEventListener('click', function () {
+form.submit();
+overlay.style.display = 'none';
+dialogueBox.style.display = 'none';
+});
+dialogueBox.getElementsByTagName('button')[0].addEventListener('click', function () {
+overlay.style.display = 'none';
+dialogueBox.style.display = 'none';
+});
+});
+});
 
 
+
+// ///////////////////////////////////////////////////////////////////////
+// ////////Pour la suppression du compte du recruteur////////////////////
+document.querySelectorAll('.delete-count').forEach(function (form) {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const overlay = document.getElementById('overlay');
+overlay.style.display = 'block';
+const dialogueBox = document.getElementById('dialogueBox');
+dialogueBox.style.display = 'block';
+dialogueBox.getElementsByTagName('p')[0].innerText = 'Êtes-vous sûr de vouloir supprimer votre compte ?';
+dialogueBox.getElementsByTagName('button')[1].addEventListener('click', function () {
+form.submit();
+overlay.style.display = 'none';
+dialogueBox.style.display = 'none';
+});
+dialogueBox.getElementsByTagName('button')[0].addEventListener('click', function () {
+overlay.style.display = 'none';
+dialogueBox.style.display = 'none';
+});
+});
+});
+
+</script>
+	
+
+</script>{% endblock %}

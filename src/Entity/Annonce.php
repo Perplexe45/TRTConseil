@@ -158,6 +158,12 @@ class Annonce
         return $this;
     }
 
+    public function __toString()   
+    {
+        return $this->getLieu() . ' : ' .$this->getDescription();
+    }
+
+
     /**
      * @return Collection<int, CandidatAnnonce>
      */
@@ -211,6 +217,7 @@ class Annonce
 
         return $this;
     }
+        
 
  
 

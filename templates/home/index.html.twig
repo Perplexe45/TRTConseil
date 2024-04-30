@@ -31,7 +31,7 @@
 	<div class="container" id="flash-messages">
 		<div class="messages-container">
 			{% for message in app.flashes('error') %}
-				<div class="alert alert-danger centered" role="alert">{{ message }}</div>
+				<div class="alert centered flashError" role="alert">{{ message }}</div>
 			{% endfor %}
 
 			{% for message in app.flashes('success') %}
@@ -269,7 +269,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section>	
 
 	<section data-bs-version="5.1" class="form5" id="form5-1m">
 		<div class="container mb-5">
@@ -335,7 +335,7 @@
 										display: flex;
 										position: relative;
 									"></section>
-	<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+	{# <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script> #}
 	<script src="assets/smoothscroll/smooth-scroll.js"></script>
 	<script src="assets/ytplayer/index.js"></script>
 	<script src="assets/dropdown/js/navbar-dropdown.js"></script>

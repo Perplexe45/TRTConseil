@@ -12,11 +12,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-
-
 
 class ConsultantCrudController extends AbstractCrudController
 {
@@ -46,11 +41,6 @@ class ConsultantCrudController extends AbstractCrudController
         yield TextField::new('telephone')->setLabel('Téléphone');
         yield EmailField::new('email');
 
-
-     
-        
-      
-        
         if ($pageName === Crud::PAGE_NEW || $pageName === Crud::PAGE_EDIT) {
             yield TextField::new('password')
                 ->setLabel('Mot de passe')
@@ -69,8 +59,6 @@ class ConsultantCrudController extends AbstractCrudController
                 ->setRequired(true)
                 ->hideWhenUpdating();
         }
-        
-        // ...
         
     }
 }

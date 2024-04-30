@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Annonce;
 use App\Entity\Candidat;
+use App\Entity\CandidatAnnonce;
 use App\Entity\Recruteur;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +33,8 @@ class DashboardConsultantController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Les recruteurs', 'fas fa-list', Recruteur::class);
-        yield MenuItem::linkToCrud('Les candidat', 'fas fa-user', Candidat::class);
-        yield MenuItem::linkToCrud('Les annonces', 'fas fa-user', Annonce::class);
+        yield MenuItem::linkToCrud('Les candidats', 'fas fa-user', Candidat::class);
+        yield MenuItem::linkToCrud('Liste des annonces', 'fas fa-user', Annonce::class);
+        yield MenuItem::linkToCrud('Annnonces postulées', 'fas fa-user', CandidatAnnonce::class);
     }
 }

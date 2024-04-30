@@ -48,16 +48,27 @@
 
 					{# {{ dump(annonce.candidatAnnonces) }}  #}
 					{% for candidatAnnonce in annonce.candidatAnnonces %}
-						<tr>
-							<td>{{ candidatAnnonce.annonce.id }}</td>
-							<td>{{ candidatAnnonce.candidat.prenom }}</td>
-							<td>{{ candidatAnnonce.candidat.nom }}</td>
-							<td>{{ candidatAnnonce.candidat.metier }}</td>
-							<td>{{ candidatAnnonce.candidat.email}}</td>
-							<td class="text-center" ><button type="button" class="cv-button btn btn-primary">
-								<a href="{{ asset('uploads/' ~ candidatAnnonce.candidat.cv) }}" download="{{ candidatAnnonce.candidat.cv }}" class="cv-link">
-								Télécharger le CV</a></button></td>
-						</tr>
+						{% if candidatAnnonce.candidat.approbationConsultant and candidatAnnonce.approbationConsultant %}
+							<tr>
+								<td class="text-center fs-5">{{ candidatAnnonce.annonce.id }}</td>
+								<td class="text-center fs-5">{{ candidatAnnonce.candidat.prenom }}</td>
+								<td class="text-center fs-5">{{ candidatAnnonce.candidat.nom }}</td>
+								<td class="text-center fs-5">{{ candidatAnnonce.candidat.metier }}</td>
+								<td class="text-center fs-5">{{ candidatAnnonce.candidat.email}}</td>
+								{# <td class="text-center fs-5" ><button type="button" class="btn btn-primary">
+									<a href="{{ asset('uploads/' ~ candidatAnnonce.candidat.cv) }}" download="{{ candidatAnnonce.candidat.cv }}" class="cv-link">
+									Télécharger le CV</a></button></td> #}
+								<td class="text-center fs-5">
+									<button type="button" class="btn btn-primary">
+										<a href="{{ path('download_cv', {'filename': candidatAnnonce.candidat.cv}) }}" class="cv-link">
+											Télécharger le CV
+										</a>
+									</button>
+								</td>
+							</tr>
+						{% endif %}
+						
+							
 					{% endfor %}
 				</tbody>
 			</table>

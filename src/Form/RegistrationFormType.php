@@ -85,7 +85,7 @@ class RegistrationFormType extends AbstractType
         'class' => Metier::class,
         'choice_label' => 'nom',
         'label' => false,
-        'placeholder' => 'Sélectionnez un métier', // Ajoutez cette ligne
+        'placeholder' => 'Sélectionnez un métier', 
         'attr' => [
             'class' => 'form-control inputCustom',
         ]

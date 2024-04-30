@@ -7,4 +7,10 @@ controllers:
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
+
+download_cv:
+    path: /annonces/download_cv/{filename}
+    controller: App\Controller\AnnonceController::downloadCV    
+    requirements:
+        filename: '.+'
             
