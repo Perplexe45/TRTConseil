@@ -2,7 +2,6 @@
 
 namespace App\EventSubscriber;
 
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\CandidatAnnonce;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
@@ -10,9 +9,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-
 
 class CandidatAnnonceSubscriber implements EventSubscriberInterface
 {
@@ -41,20 +37,23 @@ class CandidatAnnonceSubscriber implements EventSubscriberInterface
         if ($entity instanceof CandidatAnnonce && $entity->isEnvoiMailRecruteur()) {
             $recruteurEmail = $entity->getAnnonce()->getRecruteur()->getEmail();
             $cvPath = '/uploads/' . $entity->getCv();
+            $sujetAnnonce = $entity->getAnnonce()->getPoste();
+            $lieuTravail = $entity->getAnnonce()->getLieu();
 
             $email = (new Email())
                 ->from('alain.asselin@laposte.net')
                 ->to($recruteurEmail)
-                ->subject('Nouveau CV de candidat')
+                ->subject('Nouveau CV de candidat pour le poste de ' . $sujetAnnonce . ' à ' . $lieuTravail)
                 ->text('Veuillez trouver ci-joint le CV du candidat.')
                 ->attachFromPath($cvPath);
 
                 try {
                     $this->mailer->send($email);
-                    // Ajouter un paramètre de succès à la redirection
+                    //dd($email); 
+                    // Ajoute un paramètre de succès à la redirection
                     $response->headers->set('Location', $this->router->generate('app_consultant', ['success' => 'Le message a été envoyé au recruteur avec succès']));
                 } catch (\Exception $e) {
-                    // Ajouter un paramètre d'erreur à la redirection
+                    // Ajoute un paramètre d'erreur à la redirection
                     $response->headers->set('Location', $this->router->generate('app_consultant', ['error' => 'Le message n\'a pas été envoyé au recruteur. Erreur : ' . $e->getMessage()]));
                 }
         }
