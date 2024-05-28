@@ -167,52 +167,52 @@
 										</div>
 
 										<div class="card-body bg-light">
-											<form method="POST" action="{{ path('add_annonce') }}" class="bg-light">
-												<div class="row">
-													<div class="col">
-														<label for="date">Date</label>
-														<input type="date" class="form-control inputCustom" id="date" name="date">
-													</div>
-													<div class="col">
-														<label for="lieu">Lieu</label>
-														<input type="text" class="form-control inputCustom" id="lieu" name="lieu">
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														<label for="poste">Poste</label>
-														<input type="text" class="form-control inputCustom" id="poste" name="poste">
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														<label for="horaire">Horaire</label>
-														<input type="text" class="form-control inputCustom" id="horaire" name="horaire">
-													</div>
-													<div class="col">
-														<label for="salaire">Salaire</label>
-														<input type="text" class="form-control inputCustom" id="salaire" name="salaire">
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														<label for="description">Description</label>
-														<textarea class="form-control inputCustom" id="description" name="description" rows="3"></textarea>
-													</div>
-												</div>
-												<br>
-												<div class="row">
-													<div class="col">
-														<button type="submit" class="btn btn-primary btn-sm rounded btnWidth">Ajouter</button>
-													</div>
-												</div>
-												<div class="row">
-													<div class="form-note text-center mt-2">
-														<i>PS : les annonces seront publiées après l'accord du consultant du site</i>
-													</div>
-												</div>
-											</form>
-										</div>
+    <form method="POST" action="{{ path('add_annonce') }}" class="bg-light">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="date">Date</label>
+                <input type="date" class="form-control inputCustom" id="date" name="date">
+            </div>
+            <div class="col-md-6">
+                <label for="lieu">Lieu</label>
+                <input type="text" class="form-control inputCustom" id="lieu" name="lieu">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="poste">Poste</label>
+                <input type="text" class="form-control inputCustom" id="poste" name="poste">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="horaire">Horaire</label>
+                <input type="text" class="form-control inputCustom" id="horaire" name="horaire">
+            </div>
+            <div class="col-md-6">
+                <label for="salaire">Salaire</label>
+                <input type="text" class="form-control inputCustom" id="salaire" name="salaire">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="description">Description</label>
+                <textarea class="form-control inputCustom" id="description" name="description" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col text-center">
+                <button type="submit" class="btn btn-primary btn-sm rounded btnWidth">Ajouter</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center form-note mt-2">
+                <i>PS : les annonces seront publiées après l'accord du consultant du site</i>
+            </div>
+        </div>
+    </form>
+</div>
+
 
 									</div>
 

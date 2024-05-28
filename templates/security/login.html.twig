@@ -5,15 +5,15 @@
 
 {% block body %}
 
-	<section data-bs-version="5.1" class="form7 cid-u5uXzWpi1R" id="form7-r">
+	<section data-bs-version="5.1" class="mt-5" id="form7-r">
 		<div class="container">
 
 			<div class="container my-1">
 				<div class="row">
 					<div class="col-md-3"></div>
 					<div class="col-md-6">
-						<div class="mbr-section-head titleH1 p-2">
-							<h1 class="mbr-fonts-style align-center pt-1 fs-2">
+						<div class=" titleH1 p-2">
+							<h2 class="mbr-fonts-style align-center pt-1 fs-2">
 								Connexion des utilisateurs
 						</div>
 					</div>
@@ -39,43 +39,45 @@ const url = this.getAttribute('href');
 window.location.href = url;
 });
 					</script>
+						<div class="mt-5 card shadow-sm p-4 bg-white mx-auto" style="max-width: 400px; border-radius: 25px;">
+    <form action="" method="POST" class="mbr-form form-with-styler mx-auto" data-verified="">
+        <p class="mbr-text mbr-fonts-style align-center mb-4 display-7">
+            Veuillez vous identifier
+        </p>
 
-					<form action="" method="POST" data-rcpha_sitekey="" data-rcpha_secretkey="" class="mbr-form form-with-styler mx-auto" data-verified="">
-						<p class="mbr-text mbr-fonts-style align-center mb-4 display-7">
-							Veuillez vous identifier
-						</p>
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-						{% if error %}
-							<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-						{% endif %}
+        {% if app.user %}
+            <div class="mb-3">
+                Vous êtes connecté en tant que :
+                {{ app.user.userIdentifier }},
+                <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
 
-						{% if app.user %}
-							<div class="mb-3">
-								Vous êtes connécté en tant que :
-								{{ app.user.userIdentifier }},
-								<a href="{{ path('app_logout') }}">Logout</a>
-							</div>
-						{% endif %}
+        <div class="form-group mb-3 text-center">
+            <label for="inputEmail">Email</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control inputCustom" autocomplete="email" required autofocus>
+        </div>
+        <div class="form-group mb-3 text-center">
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="form-control inputCustom" autocomplete="current-password" required>
+        </div>
 
-						<div class="dragArea row">
-							<div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
-								<label for="inputEmail">Email</label>
-								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control inputCustom" autocomplete="email" required autofocus>
-							</div>
-							<div data-for="password" class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
-								<label for="inputPassword">mot de passe</label>
-								<input type="password" name="password" id="inputPassword" class="form-control emailInput inputCustom" autocomplete="current-password" required>
-							</div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary btn-block btn-custom">
+                Valider
+            </button>
+        </div>
+    </form>
+</div>
 
-							<div class="col-auto mbr-section-btn align-center">
-								<button type="submit" class="btn btn-primary display-4">
-									Valider
-								</button>
-							</div>
-						</div>
-					</form>
+
+							
 				</div>
 			</div>
 		</div>

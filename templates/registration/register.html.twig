@@ -5,108 +5,105 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-	<section data-bs-version="5.1" class="cid-u5uXzWpi1R" id="form7-r">
-		<div class=" container">
+	<section data-bs-version="5.1" class="mt-5" id="form7-r">
+		<div class="container main-content">
 			<div class="row">
 				<div class="col-md-3"></div>
 				<div class="col-md-6">
 					<div class="mbr-section-head titleH1 fs-2">
-						<h1 class="mbr-fonts-style align-center pt-1">
+						<h2 class="mbr-fonts-style align-center pt-1">
 							Inscription
-						</h1>
+						</h2>
 					</div>
 				</div>
 				<div class="col-md-3"></div>
 			</div>
 
 			<div class="row justify-content-center mt-5">
-				<div class="col-lg-6 mx-auto">
-					<div class="card bg-light rounded rounded-5	 row">
-						<div class="col-lg-12 col-md-12 col-sm-12 form-group" data-for="name">
-							<form action="" method="POST" class="mx-auto" data-form-title="Form Name">
-								<fieldset class="align-center">
-									<div class="pt-2">
-										<legend>Vous êtes</legend>
-									</div>
+				<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card bg-light rounded-5 p-4">
+                <form action="" method="POST" data-form-title="Form Name">
+                    <fieldset class="text-center">
+                        <legend class="pt-2">Vous êtes</legend>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="categorie" value="Candidat" id="categorie_candidat"/>
+                            <label class="form-check-label" for="categorie_candidat">Candidat</label>
+                        </div>
+                        <div class="form-check form-check-inline ms-3">
+                            <input class="form-check-input" type="radio" name="categorie" value="Recruteur" id="categorie_recruteur"/>
+                            <label class="form-check-label" for="categorie_recruteur">Recruteur</label>
+                        </div>
+                        <hr>
+                    </fieldset>
 
-									<input type="radio" name="categorie" value="Candidat" id="categorie_candidat"/>
-									<label for="Candidat">Candidat</label>
+                    <div class="text-center fs-5 bg-danger">
+                        {% for label, messages in app.flashes %}
+                            <div class="flash-{{ label }}">
+                                {% for message in messages %}
+                                    <div class="flash-messageSelect flash-messageSuccess">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
 
-									<input class="ms-3" type="radio" name="categorie" value="Recruteur" id="categorie_recruteur"/>
-									<label for="Recruteur">Recruteur</label>
+                    {{ form_errors(registrationForm) }}
+                    {{ form_start(registrationForm) }}
 
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div id="candidat_container">
+                                {{ form_label(registrationForm.candidat.nom) }}
+                                {{ form_widget(registrationForm.candidat.nom, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div id="metier_container">
+                                {{ form_label(registrationForm.metier) }}
+                                {{ form_widget(registrationForm.metier, { 'attr': {'class': 'form-control border text-muted'} }) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div id="recruteur_container">
+                                {{ form_label(registrationForm.recruteur.nomEntreprise) }}
+                                {{ form_widget(registrationForm.recruteur.nomEntreprise, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="form-group">
+                                {{ form_row(registrationForm.email, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="form-group">
+                                {{ form_row(registrationForm.plainPassword, { 'label': 'Mot de passe', 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="form-check">
+                                {{ form_row(registrationForm.agreeTerms) }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <div class="form-note">
+                                Vous avez déjà un compte? <a href="/login">Connexion</a>
+                            </div>
+                        </div>
+                    </div>
 
-									<hr>
-								</fieldset>
+                    {{ form_end(registrationForm) }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-								<div
-									class="text-center fs-5 bg-danger">
-									{# Message si oubli de faire une sélection (recruteur ou candidat) ou message de success de la soumission du formulaire#}
-									{% for label, messages in app.flashes %}
-										<div class="flash-{{ label }}">
-											{% for message in messages %}
-												<div class="flash-messageSelect flash-messageSuccess">{{ message }}</div>
-											{% endfor %}
-										</div>
-									{% endfor %}
-								</div>
-
-
-								{{ form_errors(registrationForm) }}
-								{{ form_start(registrationForm) }}
-
-								<div
-									class="row">
-									<!-- Ajout de la classe row pour centrer les champs -->
-									<div class="col-md-2"></div>
-									<div class="col-md-8">
-										<div id="candidat_container" class="col mb- rounded p-2">
-											{{ form_label(registrationForm.candidat.nom) }}
-											{{ form_widget(registrationForm.candidat.nom) }}
-										</div>
-
-										<div id="metier_container" class="col mb-1 rounded p-2">
-											{{ form_label(registrationForm.metier) }}
-											{{ form_widget(registrationForm.metier, { 'attr': {'class': 'form-control border text-muted'} }) }}
-										</div>
-
-										<div id="recruteur_container" class="col mb-3 p-2">
-											{{ form_label(registrationForm.recruteur.nomEntreprise) }}
-											{{ form_widget(registrationForm.recruteur.nomEntreprise) }}
-										</div>
-
-										<div class="form-group col mb-3 mt-1 ">
-											{{ form_row(registrationForm.email) }}
-										</div>
-
-										<div class="form-group col mb-3">
-											{{ form_row(registrationForm.plainPassword, {label: 'mot de passe'}) }}
-										</div>
-
-										<div class="chek-form">
-											{{ form_row(registrationForm.agreeTerms) }}
-										</div>
-
-										<div class="mbr-section-btn align-center">
-											<button type="submit" class="btn btn-primary display-4 btnWidth">Valider</button>
-										</div>
-
-										<div class="form-note text-center">Vous avez déjà un compte?
-											<a href="/login">Connexion</a>
-										</div>
-									</div>
-									<div class="col-md-2"></div>
-								</div>
-								<!-- Fermeture de la classe row -->
-
-								{{ form_end(registrationForm) }}
-
-
-							</form>
-
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</section>
