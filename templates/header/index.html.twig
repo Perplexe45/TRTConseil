@@ -1,58 +1,50 @@
 {% block stylesheets %} {% endblock %}
 
 <section>
-<nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg" style="background-color: #dae7ff;">
-    <div class="container">
+<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light bg-primary">  <div class="container">
         <a class="navbar-brand" href="#">
             <img src="assets/images/logo_TrtConseil.png" alt="image du logo" style="height: 4rem"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </button>
+            <span class="navbar-toggler-icon"></span>  </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto" style="margin-right: 30px;">
                 <li class="nav-item">
-                    <a class="nav-link text-black text-primary display-7" href="/accueil">Accueil</a>
+                    <a class="nav-link text-light display-7" href="/accueil">Accueil</a>
                 </li>
                 <li class="nav-item ms-3">
-                    <a class="nav-link text-black text-primary display-7" href="/annonces">Annonces</a>
+                    <a class="nav-link text-light display-7" href="/annonces">Annonces</a>
                 </li>
                 <li class="nav-item dropdown ms-3">
-                    <a class="nav-link dropdown-toggle text-black text-primary display-7" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Comptes</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item text-black text-primary display-7" href="register">Inscription</a></li>
-                        <li class="dropdown-divider"></li>
+                    <a class="nav-link dropdown-toggle text-light display-7" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Comptes</a>
+                    <ul class="dropdown-menu bg-primary text-white">  <li><a class="dropdown-item" href="register">Inscription</a></li>
+                        <li class=" dropdown-divider"></li>
                         <li class="dropdown-item">
-                            <a class="nav-link text-black text-primary display-7" href="/compte/recruteur">Espace Recruteur</a>
+                            <a class="dropdown-item" href="/compte/recruteur">Espace Recruteur</a>
                         </li>
                         <li class="dropdown-item">
-                            <a class="nav-link text-black text-primary display-7" href="/compte/candidat">Espace Candidat</a>
+                            <a class="dropdown-item" href="/compte/candidat">Espace Candidat</a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item ms-3">
-                    <a class="nav-link text-black text-primary display-7" href="/accueil#form5-1m">Contacts</a>
+                <li class="nav-item ms-3 ">
+                    <a class="nav-link text-light display-7" href="/accueil#form5-1m">Contacts</a>
                 </li>
             </ul>
             <ul class="navbar-nav" style="align-items: center;">
                 <li class="nav-item" style="margin-left: 10px;">
-                    <a class="btn btn-primary display-4 rounded rounded-pill" href="/login">Connexion</a>
+                    <a class="btn btn-light display-4 " href="/login">Connexion</a>
                 </li>
                 <li class="nav-item" style="margin-left: 10px;">
                     {% if app.user %}
                         <a class="nav-link" href="/logout">
-                            <i class="fa-solid fa-user-large-slash" style="color: green;"></i>
-                            <span style="color: green;">Déconnexion</span>
+                            <i class="fa-solid fa-user-large-slash" style="color: white;"></i>
+                            <span style="color: white;">Déconnexion</span>
                         </a>
                     {% else %}
                         <a class="nav-link" href="/login">
-                            <i class="fa-solid fa-user" style="color: red;"></i>
-                            <span style="color: red;">Pas connecté</span>
+                            <i class="fa-solid fa-user" style="color: white;"></i>
+                            <span style="color: white;">Pas connecté</span>
                         </a>
                     {% endif %}
                 </li>
@@ -60,5 +52,6 @@
         </div>
     </div>
 </nav>
+
 
 </section>

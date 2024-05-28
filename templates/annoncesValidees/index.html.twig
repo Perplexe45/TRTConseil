@@ -24,12 +24,23 @@
 			
 		</div>
 
+							{# <th style="width: 3rem">ID</th>
+							<th style="width: 7rem;">Date</th>
+							<th style="width: 8rem;">Recruteur</th>
+							<th style="width: 11rem;">Poste</th>
+							<th style="width: 7rem;">Lieu</th>
+							<th style="width: 9rem;">Horaire</th>
+							<th style="width: 8rem;">Salaire</th>
+							<th>Description</th>
+							<th style="width: 8rem;">Action</th> #}
+
+
 		<div class="mb-5">
 			<div class="table-container">
-				<table class="table table-striped table-hover table-bordered ">
-					<thead class="colorThead text-center" {# style="position: sticky; top: 0;" #}>
-						<tr class="bg-primary fs-6 text-white" >
-							<th style="width: 3rem">ID</th>
+    			<table class="table table-striped table-hover table-bordered table-sm">
+            <thead class="colorThead text-center" style="position: sticky; top: 0;">
+                <tr class="bg-primary fs-6 text-white">
+                    <th style="width: 3rem">ID</th>
 							<th style="width: 7rem;">Date</th>
 							<th style="width: 8rem;">Recruteur</th>
 							<th style="width: 11rem;">Poste</th>
@@ -38,38 +49,37 @@
 							<th style="width: 8rem;">Salaire</th>
 							<th>Description</th>
 							<th style="width: 8rem;">Action</th>
-						</tr>
-					</thead >
-					<tbody class="text-center">
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                {% for annonce in annonces %}
+                    <tr>
+                        <td>{{ annonce.id }}</td>
+                        <td>{{ annonce.dateCreation|date('d/m/Y') }}</td>
+                        <td>{{ annonce.recruteur.nomEntreprise }}</td>
+                        <td>{{ annonce.poste }}</td>
+                        <td>{{ annonce.lieu }}</td>
+                        <td>{{ annonce.horaire }}</td>
+                        <td>{{ annonce.salaire }}</td>
+                        <td>{{ annonce.description }}</td>
 
+                        {% if app.user and app.user.candidat and app.user.candidat.id %}
+                            {# L'utilisateur est connecté et a un profil candidat #}
+                            <td>
+                                <a href="{{ path('app_postuler', {'annonce': annonce.id, 'candidat': app.user.candidat.id, 'postuler': true}) }}" class="btn btn-primary btn-sm rounded fs_small ">Postuler</a>
+                            </td>
+                        {% else %}
+                            {# L'utilisateur n'est pas connecté ou n'a pas de profil candidat #}
+                            <td>
+                                <a href="{{ path('app_login') }}" class="btn btn-info  rounded fs_small">Postuler</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-						{% for annonce in annonces %}
-							{# 	{{ dump(app.user.candidat.id) }} #}
-							<tr>
-								<td>{{ annonce.id }}</td>
-								<td>{{ annonce.dateCreation|date('d/m/Y') }}</td>
-								<td>{{ annonce.recruteur.nomEntreprise }}</td>
-								<td>{{ annonce.poste }}</td>
-								<td>{{ annonce.lieu }}</td>
-								<td>{{ annonce.horaire }}</td>
-								<td>{{ annonce.salaire }}</td>
-								<td>{{ annonce.description }}</td>
-
-								{% if app.user and app.user.candidat and app.user.candidat.id %}
-									{# L'utilisateur est connecté et a un profil candidat #}
-									<td>
-										<a href="{{ path('app_postuler', {'annonce': annonce.id, 'candidat': app.user.candidat.id, 'postuler': true}) }}" class="btn btn-primary btn-sm rounded fs_small ">Postuler</a>
-									</td>
-								{% else %}
-									{# L'utilisateur n'est pas connecté ou n'a pas de profil candidat #}
-									<td>
-										<a href="{{ path('app_login') }}" class="btn btn-info  rounded fs_small">Postuler</a>
-									</td>
-								{% endif %}
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				
 			</div>
 
 

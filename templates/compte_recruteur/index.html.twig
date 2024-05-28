@@ -101,7 +101,7 @@
 								{# Dernières annonces #}
 								<div class="tab-pane fade" id="lastAnnonces" role="tabpanel" aria-labelledby="lastAnnonces-tab">
 									<div class="card bg-light">
-										<div class="card-header bg-light">
+										<div class="card-header">
 											<h3 class="text-center">Liste des annonces</div>
 											<div class="card-body">
 												<table class="table-bordered table-striped table-hover">
@@ -161,8 +161,8 @@
 									</div>
 
 									{# Ajout d'annonces #}
-									<div class="tab-pane fade" id="addAnnonces" role="tabpanel" aria-labelledby="addAnnonces-tab">
-										<div class="card-header bg-light">
+									<div class="tab-pane fade bg-light" id="addAnnonces" role="tabpanel" aria-labelledby="addAnnonces-tab">
+										<div class="card-header ">
 											<h3 class="text-center">Ajout d'annonces</h3>
 										</div>
 
@@ -216,10 +216,11 @@
 
 									</div>
 
-									{# Coordonées du recruteur #}
-									<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-										<div class="row bg-light">
-											<div class="card-header bg-light mb-1">
+									{# Coordonnées du recruteur #}
+									<div class="tab-pane fade bg-light" id="address" role="tabpanel" aria-labelledby="address-tab">
+										<div class="row">
+
+											<div class="card-header CoordonneesdRecruteur">
 												<h3 class="text-center">Coordonnées du recruteur</h3>
 											</div>
 											<div class="col-lg-6">
@@ -301,11 +302,10 @@
 										{# Détails du compte #}
 										<div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
 											<div class="card bg-light">
-												<div class="card-header bg-light">
+												<div class="card-header">
 													<h3 class="text-center">Détails du compte</h3>
 												</div>
 												<div class="card-header">
-
 													<form method="POST" action="{{ path('modif_compte') }}" class="bg-light">
 														<div class="row">
 															<div class="form-group col-md-3 mb-2">
@@ -363,8 +363,8 @@
 
 										{# Suppression du compte #}
 										<div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
-											<div class="card">
-												<div class="card-header bg-light">
+											<div class="card bg-light">
+												<div class="card-header">
 													<h3 class="text-center">Suppression du compte</h3>
 												</div>
 												<div class="bg-light">
